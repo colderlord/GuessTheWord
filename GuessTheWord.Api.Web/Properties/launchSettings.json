@@ -1,0 +1,21 @@
+﻿{
+  "profiles": {
+    "GuessTheWord": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:62275;http://localhost:62276"
+    },
+    "GuessTheWord_Swagger": {
+      "commandName": "Project",
+      "launchUrl": "swagger",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:62275;http://localhost:62276"
+    }
+  }
+}

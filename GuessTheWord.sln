@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuessTheWord.Abstractions", "GuessTheWord.Abstractions\GuessTheWord.Abstractions.csproj", "{71F2A809-BBB6-41B4-A633-C3FCBEA819EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuessTheWord.Engine", "GuessTheWord.Engine\GuessTheWord.Engine.csproj", "{C6EB5A10-2DAE-421D-94CB-3469C9C18B44}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{804569CB-F429-41C0-A211-104E1012445F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuessTheWord.TextFileDictionary", "Dictionaries\GuessTheWord.TextFileDictionary\GuessTheWord.TextFileDictionary.csproj", "{F089A94E-C0E6-4A85-B50B-9CB2CE49A516}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuessTheWord.Api.Web", "GuessTheWord.Api.Web\GuessTheWord.Api.Web.csproj", "{7CD7E9B8-CC32-4178-98C0-12B287B3A8EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71F2A809-BBB6-41B4-A633-C3FCBEA819EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71F2A809-BBB6-41B4-A633-C3FCBEA819EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71F2A809-BBB6-41B4-A633-C3FCBEA819EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71F2A809-BBB6-41B4-A633-C3FCBEA819EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6EB5A10-2DAE-421D-94CB-3469C9C18B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6EB5A10-2DAE-421D-94CB-3469C9C18B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6EB5A10-2DAE-421D-94CB-3469C9C18B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6EB5A10-2DAE-421D-94CB-3469C9C18B44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F089A94E-C0E6-4A85-B50B-9CB2CE49A516}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F089A94E-C0E6-4A85-B50B-9CB2CE49A516}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F089A94E-C0E6-4A85-B50B-9CB2CE49A516}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F089A94E-C0E6-4A85-B50B-9CB2CE49A516}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CD7E9B8-CC32-4178-98C0-12B287B3A8EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CD7E9B8-CC32-4178-98C0-12B287B3A8EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CD7E9B8-CC32-4178-98C0-12B287B3A8EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CD7E9B8-CC32-4178-98C0-12B287B3A8EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F089A94E-C0E6-4A85-B50B-9CB2CE49A516} = {804569CB-F429-41C0-A211-104E1012445F}
+	EndGlobalSection
+EndGlobal

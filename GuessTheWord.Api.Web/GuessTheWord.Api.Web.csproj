@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <ItemGroup>
+        <PackageReference Include="Scrutor" Version="4.2.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GuessTheWord.Abstractions\GuessTheWord.Abstractions.csproj" />
+      <ProjectReference Include="..\GuessTheWord.Engine\GuessTheWord.Engine.csproj" />
+    </ItemGroup>
+
+</Project>

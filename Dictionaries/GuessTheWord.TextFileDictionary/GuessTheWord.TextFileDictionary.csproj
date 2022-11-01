@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\GuessTheWord.Abstractions\GuessTheWord.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="russian.txt" />
+      <EmbeddedResource Include="Resources\russian.txt" />
+    </ItemGroup>
+
+</Project>
