@@ -27,7 +27,6 @@ namespace GuessTheWord.Web.Controller
         [HttpPost(Name = "SetRules")]
         public IActionResult SetRules(Rule rule)
         {
-            var rules = new Engine.Models.Rule(rule.Language, rule.Letters, rule.Attempts);
             gameService.SetRules(rule.Language, rule.Letters, rule.Attempts);
             return Ok();
         }

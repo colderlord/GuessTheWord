@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GuessTheWord.Abstractions.Models;
 using GuessTheWord.Abstractions.Searcher;
@@ -8,7 +9,7 @@ namespace GuessTheWord.Engine.Searcher
     /// <inheritdoc />
     internal sealed class WordSearcher : IWordSearcher
     {
-        private readonly List<string> words;
+        private List<string> words;
 
         /// <summary>
         /// Ctor
@@ -40,16 +41,12 @@ namespace GuessTheWord.Engine.Searcher
             }
             else
             {
-                results = words
+                words = words
                     .Where(w => CheckWord(w, letters))
-                    .ToArray()
+                    .ToList();
+                results = words
                     .Take(searchSettings.MaxResults)
                     .ToArray();
-            }
-
-            foreach (var result in results)
-            {
-                words.Remove(result);
             }
 
             return results;

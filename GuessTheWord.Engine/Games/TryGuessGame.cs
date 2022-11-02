@@ -57,7 +57,7 @@ namespace GuessTheWord.Engine.Games
             {
                 // Если слова нет - значит выдать все возможные слова
                 searchWordModel = new SearchWordModel(Array.Empty<ILetterModel>(),
-                    new SearchSettings(rule.LettersCount, rule.Culture));
+                    new SearchSettings(rule.Culture));
             }
             else
             {
@@ -71,7 +71,7 @@ namespace GuessTheWord.Engine.Games
                 var letters = alphabet.AlphabetLetters;
                 var lettersToSearch = processedLetterModels.Concat(letters.Except(usedLetters).Select(a => new LetterModel(a))).ToArray();
 
-                searchWordModel = new SearchWordModel(lettersToSearch, new SearchSettings(rule.LettersCount, rule.Culture));
+                searchWordModel = new SearchWordModel(lettersToSearch, new SearchSettings(rule.Culture));
             }
 
             return wordSearcher.GetWords(searchWordModel).ToArray();
