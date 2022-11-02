@@ -13,6 +13,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Link from "@mui/material/Link";
 import GlobalStyles from '@mui/material/GlobalStyles';
 
+import { Storage } from "../storage/Storage";
+import { Settings } from "../interfaces/Settings";
+
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 function ThemeSelector() {
@@ -25,16 +28,24 @@ function ThemeSelector() {
     );
 }
 
-function LanguageSelector() {
-    const language = "ru-RU";
+interface LanguageSelectorProps {
+    settings: Settings
+}
+
+function LanguageSelector(props: LanguageSelectorProps) {
+    function onChangeLanguage(e: any) : void {
+        props.settings.SetCulture(e.target.value);
+    }
+
     return (<FormControl sx={{ my: 1, mx: 1.5 }}>
         <InputLabel id="language-select-label">Язык</InputLabel>
         <Select
             labelId="demo-language-select-label"
             id="language-simple-select"
-            value={language}
+            value={props.settings.Culture}
             label="Язык"
             size={"small"}
+            onChange={onChangeLanguage}
         >
             <MenuItem value={"ru-RU"}>Русский</MenuItem>
             <MenuItem value={"en-US"}>English</MenuItem>
@@ -63,6 +74,8 @@ export interface LayoutProps {
      * @memberof LayoutProps
      */
     children?: React.ReactNode;
+
+    storage: Storage;
 }
 
 export default function Render(props: LayoutProps) {
@@ -101,7 +114,7 @@ export default function Render(props: LayoutProps) {
                         sx={{ flex: 1 }}
                     />
                     <ThemeSelector />
-                    <LanguageSelector />
+                    <LanguageSelector settings={props.storage.Settings}/>
                 </Toolbar>
                 {props.children}
                 <Copyright />

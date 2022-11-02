@@ -4,29 +4,36 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { observer } from 'mobx-react';
+import { Storage } from "../storage/Storage";
 
 import Rules from "./Rules";
 import Game from "./Game";
 
 const steps = ['Правила', 'Игра'];
 
-function getStepContent(step: number) {
+export interface ApplicationProps{
+    storage: Storage;
+}
+
+function getStepContent(step: number, storage: Storage) {
     switch (step) {
         case 0:
-            return <Rules />;
+            return <Rules settings={storage.Settings}/>;
         case 1:
-            return <Game />;
+            return <Game storage={storage}/>;
         default:
             throw new Error('Unknown step');
     }
 }
 
-export default function Application() {
+function Application(props: ApplicationProps) {
     const [activeStep, setActiveStep] = React.useState(0);
 
     const handleNext = () => {
         if (activeStep == steps.length - 1)
         {
+            props.storage.Clear();
             setActiveStep(0);
         }
         else
@@ -42,7 +49,7 @@ export default function Application() {
                     Отгадай слово
                 </Typography>
                 <React.Fragment>
-                    {getStepContent(activeStep)}
+                    {getStepContent(activeStep, props.storage)}
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <Button
                             variant="contained"
@@ -57,3 +64,5 @@ export default function Application() {
         </Container>
     )
 }
+
+export default observer(Application)

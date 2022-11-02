@@ -1,4 +1,4 @@
-export interface LetterModel {
+export interface Letter {
     letter: string,
     letterType: LetterType,
     position: number

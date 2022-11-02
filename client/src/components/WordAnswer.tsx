@@ -1,13 +1,13 @@
 import * as React from 'react';
 import Button from "@mui/material/Button";
-import {WordModel} from "../interfaces/WordModel";
-import {LetterModel, LetterType} from "../interfaces/LetterModel";
+import {Word} from "../interfaces/Word";
+import {Letter, LetterType} from "../interfaces/Letter";
 
 export interface WordAnswerProps {
-    word: WordModel;
+    word: Word;
 }
 
-function getButtonColor(letter: LetterModel) {
+function getButtonColor(letter: Letter) {
     switch (letter.letterType) {
         case LetterType.None:
         {
@@ -33,7 +33,7 @@ export default function WordAnswer(props: WordAnswerProps) {
     return (
         <React.Fragment>
             {
-                props.word.letters.map((letter: LetterModel) => (
+                props.word.letters.map((letter: Letter) => (
                     <Button variant="contained" color={getButtonColor(letter)} sx={{ mt: 3, ml: 1 }}>
                         {letter.letter}
                     </Button>

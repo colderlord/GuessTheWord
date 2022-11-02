@@ -2,8 +2,43 @@ import * as React from 'react';
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
+import { observer } from 'mobx-react';
 
-export default function Rules() {
+import { Settings } from "../interfaces/Settings"
+
+export interface RulesProps {
+    settings: Settings;
+}
+
+function Rules(props: RulesProps) {
+    function onChangeLettersCount(e: any) {
+        var value = e.currentTarget.value;
+        if (value == undefined) {
+            return;
+        }
+
+        var numberValue = Number(value);
+        if (numberValue == 0 || numberValue < 0) {
+            return;
+        }
+
+        props.settings.SetLettersCount(numberValue)
+    }
+
+    function onChangeAttempts(e: any) {
+        var value = e.currentTarget.value;
+        if (value == undefined) {
+            return;
+        }
+
+        var numberValue = Number(value);
+        if (numberValue == 0 || numberValue < 0) {
+            return;
+        }
+
+        props.settings.SetAttemptsCount(numberValue)
+    }
+
     return (
         <React.Fragment>
             <Typography variant="h6" gutterBottom>
@@ -15,7 +50,8 @@ export default function Rules() {
                         type={"number"}
                         id="lettersCount"
                         label="Количество букв"
-                        defaultValue={5}
+                        value={props.settings.LettersCount}
+                        onChange={onChangeLettersCount}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -23,10 +59,13 @@ export default function Rules() {
                         type={"number"}
                         id="lettersCount"
                         label="Количество слов"
-                        defaultValue={6}
+                        value={props.settings.Attempts}
+                        onChange={onChangeAttempts}
                     />
                 </Grid>
             </Grid>
         </React.Fragment>
     )
 }
+
+export default observer(Rules);

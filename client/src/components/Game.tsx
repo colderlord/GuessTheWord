@@ -1,116 +1,54 @@
 import * as React from 'react';
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import {WordModel} from "../interfaces/WordModel";
-import {LetterType} from "../interfaces/LetterModel";
+import Paper from "@mui/material/Paper";
+import InputBase from "@mui/material/InputBase";
+import Divider from "@mui/material/Divider";
+import AddIcon from '@mui/icons-material/Add';
+import IconButton from '@mui/material/IconButton';
 import WordAnswer from "./WordAnswer";
-import InputWord from "./InputWord";
+import {Storage} from "../storage/Storage";
 
-export interface GameInput {
-
+export interface GameProps {
+    storage: Storage;
 }
 
-const wordModels : WordModel[] = [
-    {
-        letters: [
-            {
-                letter: "в",
-                letterType: LetterType.None,
-                position: 0
-            },
-            {
-                letter: "е",
-                letterType: LetterType.Any,
-                position: 1
-            },
-            {
-                letter: "т",
-                letterType: LetterType.None,
-                position: 2
-            },
-            {
-                letter: "к",
-                letterType: LetterType.None,
-                position: 3
-            },
-            {
-                letter: "а",
-                letterType: LetterType.None,
-                position: 4
-            },
-        ]
-    },
-    {
-        letters: [
-            {
-                letter: "б",
-                letterType: LetterType.None,
-                position: 0
-            },
-            {
-                letter: "и",
-                letterType: LetterType.None,
-                position: 1
-            },
-            {
-                letter: "с",
-                letterType: LetterType.None,
-                position: 2
-            },
-            {
-                letter: "е",
-                letterType: LetterType.Any,
-                position: 3
-            },
-            {
-                letter: "р",
-                letterType: LetterType.Any,
-                position: 4
-            },
-        ]
-    },
-    {
-        letters: [
-            {
-                letter: "д",
-                letterType: LetterType.None,
-                position: 0
-            },
-            {
-                letter: "р",
-                letterType: LetterType.Any,
-                position: 1
-            },
-            {
-                letter: "е",
-                letterType: LetterType.Fixed,
-                position: 2
-            },
-            {
-                letter: "й",
-                letterType: LetterType.Any,
-                position: 3
-            },
-            {
-                letter: "ф",
-                letterType: LetterType.Any,
-                position: 4
-            },
-        ]
+export default function Game(props: GameProps) {
+    const [value, setValue] = React.useState<string>("");
+    function onAdd() {
+       props.storage.AddWord(value);
+       setValue("");
     }
-]
 
-export default function Game() {
     return(<React.Fragment>
             <Typography variant="h6" gutterBottom>
                 Игра началась!
             </Typography>
             <Grid container>
                 <Grid item xs={12}>
-                    <InputWord />
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Paper
+                                component="form"
+                                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+                            >
+                                <InputBase
+                                    sx={{ ml: 1, flex: 1 }}
+                                    placeholder="Введите ответ"
+                                    inputProps={{ 'aria-label': 'Введите ответ' }}
+                                    value={value}
+                                    onChange={e => setValue(e.currentTarget.value)}
+                                />
+                                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                                <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions" onClick={onAdd}>
+                                    <AddIcon />
+                                </IconButton>
+                            </Paper>
+                        </Grid>
+                    </Grid>
                 </Grid>
             {
-                wordModels.map((word) => (
+                props.storage.WordModel.map((word) => (
                     <Grid item xs={12}>
                         <WordAnswer word={word} />
                     </Grid>
