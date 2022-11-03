@@ -4,4 +4,8 @@
       <ProjectReference Include="..\GuessTheWord.Abstractions\GuessTheWord.Abstractions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Providers" />
+    </ItemGroup>
+
 </Project>

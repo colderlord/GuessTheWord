@@ -6,7 +6,11 @@
 
     <ItemGroup>
       <None Remove="russian.txt" />
-      <EmbeddedResource Include="Resources\russian.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\russian_nouns.txt" />
+      <EmbeddedResource Include="Resources\russian_nouns.txt" />
     </ItemGroup>
 
 </Project>

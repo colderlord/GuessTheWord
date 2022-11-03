@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\GuessTheWord.Abstractions\GuessTheWord.Abstractions.csproj" />
+      <ProjectReference Include="..\..\GuessTheWord.Engine\GuessTheWord.Engine.csproj" />
+    </ItemGroup>
+
+</Project>

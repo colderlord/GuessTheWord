@@ -1,4 +1,5 @@
-﻿using GuessTheWord.Abstractions.Models;
+﻿using System;
+using GuessTheWord.Abstractions.Models;
 
 namespace GuessTheWord.Abstractions
 {
@@ -10,21 +11,24 @@ namespace GuessTheWord.Abstractions
         /// <summary>
         /// Установить правила
         /// </summary>
+        /// <param name="gameType">Тип игры</param>
         /// <param name="locale">Локаль</param>
         /// <param name="lettersCount">Количество букв</param>
         /// <param name="attempts">Корличество попыток</param>
-        void SetRules(string locale, short lettersCount, short attempts);
+        void SetRules(Guid gameType, string locale, short lettersCount, short attempts);
 
         /// <summary>
         /// Перезапуск
         /// </summary>
-        void Restart();
+        /// <param name="gameType">Тип игры</param>
+        void Restart(Guid gameType);
 
         /// <summary>
         /// Попытаться угадать
         /// </summary>
+        /// <param name="gameType">Тип игры</param>
         /// <param name="word">Слово</param>
         /// <returns>Список предположений</returns>
-        string[] Put(string word);
+        IGameResult Put(Guid gameType, string word);
     }
 }

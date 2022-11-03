@@ -28,7 +28,7 @@ namespace GuessTheWord.TextFileDictionary.Providers
 
             if (words.Count == 0)
             {
-                var stream = typeof(TextProvider).Assembly.GetManifestResourceStream("GuessTheWord.TextFileDictionary.Resources.russian.txt");
+                var stream = typeof(TextProvider).Assembly.GetManifestResourceStream("GuessTheWord.TextFileDictionary.Resources.russian_nouns.txt");
                 var allWords = SplitToLines(stream);
                 foreach (var word in allWords)
                 {

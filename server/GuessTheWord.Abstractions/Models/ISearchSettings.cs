@@ -3,16 +3,11 @@
     /// <summary>
     /// Настройки поиска
     /// </summary>
-    public interface ISearchSettings
+    public interface ISearchSettings : ISearchSettingsBase
     {
         /// <summary>
         /// Максимальное количество результатов
         /// </summary>
         int MaxResults { get; }
-
-        /// <summary>
-        /// Культура
-        /// </summary>
-        string Culture { get; }
     }
 }

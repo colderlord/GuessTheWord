@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using GuessTheWord.Abstractions;
 using GuessTheWord.Abstractions.Models;
 using GuessTheWord.Abstractions.Providers;
-using GuessTheWord.Engine.Games;
 using GuessTheWord.Engine.Models;
 
 namespace GuessTheWord.Engine.Services
@@ -14,52 +14,57 @@ namespace GuessTheWord.Engine.Services
     {
         private readonly IEnumerable<IDictionaryProvider> providers;
         private readonly IEnumerable<IAlphabet> alphabets;
+        private readonly IEnumerable<IGameProvider> gameProviders;
         private readonly IRule defaultRule = new Rule("ru_RU", 5, 6);
-        private IGame game;
+        private readonly ConcurrentDictionary<Guid, IGame> games = new();
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="providers">Провайдеры</param>
         /// <param name="alphabets">Алфавиты</param>
-        public GameService(IEnumerable<IDictionaryProvider> providers, IEnumerable<IAlphabet> alphabets)
+        /// <param name="gameProviders"></param>
+        public GameService(IEnumerable<IDictionaryProvider> providers, IEnumerable<IAlphabet> alphabets, IEnumerable<IGameProvider> gameProviders)
         {
             this.providers = providers;
             this.alphabets = alphabets;
+            this.gameProviders = gameProviders;
         }
 
         /// <inheritdoc />
-        public void SetRules(string locale, short lettersCount, short attempts)
+        public void SetRules(Guid gameType, string locale, short lettersCount, short attempts)
         {
-            if (game != null)
+            if (games.TryGetValue(gameType, out var game))
             {
                 throw new Exception("Игра уже началась. Сбросьте игру, либо продолжите существующую");
             }
 
             var rule = new Rule(locale, lettersCount, attempts);
-            game = CreateGame(rule);
+            game = CreateGame(gameType, rule);
+            games.TryAdd(gameType, game);
         }
 
         /// <inheritdoc />
-        public void Restart()
+        public void Restart(Guid gameType)
         {
-            game = null;
+            games.TryRemove(gameType, out _);
         }
 
         /// <inheritdoc />
-        public string[] Put(string word)
+        public IGameResult Put(Guid gameType, string word)
         {
-            game ??= CreateGame(defaultRule);
+            var game = games.GetOrAdd(gameType, t => CreateGame(t, defaultRule));
 
-            return game.TryGuess(word);
+            return game.Play(word);
         }
 
-        private IGame CreateGame(IRule rule)
+        private IGame CreateGame(Guid gameType, IRule rule)
         {
             var culture = rule.Culture;
             var provider = providers.FirstOrDefault(a => a.Languages.Contains(culture));
             var alphaBet = GetAlphabet(culture);
-            return new TryGuessGame(rule, provider, alphaBet);
+            var gameProvider = gameProviders.First(a => a.Uid == gameType);
+            return gameProvider.CreateGame(rule, provider, alphaBet);
         }
 
         private IAlphabet GetAlphabet(string culture)

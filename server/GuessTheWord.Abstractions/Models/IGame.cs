@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="word">Слово в специальном формате</param>
         /// <returns>Список строк вариантов</returns>
-        string[] TryGuess(string word);
+        IGameResult Play(string word);
     }
 }
