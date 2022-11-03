@@ -1,9 +1,9 @@
 ﻿using GuessTheWord.Abstractions.Providers;
 
-namespace GuessTheWord.TryGuessGame.Searcher
+namespace GuessTheWord.Engine.Models
 {
     /// <inheritdoc />
-    internal sealed class SearchRequest : ISearchRequest
+    public sealed class SearchRequest : ISearchRequest
     {
         /// <summary>
         /// Ctor

@@ -13,7 +13,7 @@ namespace GuessTheWord.TextFileDictionary.Providers
     internal sealed class TextProvider : IDictionaryProvider
     {
         private readonly string[] languages = {"ru_RU", "ru"};
-        private readonly Dictionary<int, List<string>> words = new();
+        private readonly Dictionary<string, Dictionary<int, List<string>>> wordsByCulture = new();
         
         /// <inheritdoc />
         public IEnumerable<string> Languages => languages;
@@ -26,20 +26,7 @@ namespace GuessTheWord.TextFileDictionary.Providers
                 throw new ArgumentNullException(nameof(request));
             }
 
-            if (words.Count == 0)
-            {
-                var stream = typeof(TextProvider).Assembly.GetManifestResourceStream("GuessTheWord.TextFileDictionary.Resources.russian_nouns.txt");
-                var allWords = SplitToLines(stream);
-                foreach (var word in allWords)
-                {
-                    if (!words.TryGetValue(word.Length, out var lst))
-                    {
-                        words[word.Length] = lst = new List<string>();
-                    }
-
-                    lst.Add(word.ToLower());
-                }
-            }
+            var words = CheckAndInit(request.Culture);
 
             var lettersCount = request.LettersCount;
             if (lettersCount == null)
@@ -53,6 +40,37 @@ namespace GuessTheWord.TextFileDictionary.Providers
             }
 
             return wordsToSearch;
+        }
+
+        /// <inheritdoc />
+        public bool HasWord(string word, string culture)
+        {
+            var words = CheckAndInit(culture);
+            return words.Values.SelectMany(a => a).Contains(word);
+        }
+
+        private Dictionary<int, List<string>> CheckAndInit(string culture)
+        {
+            if (!wordsByCulture.TryGetValue(culture, out var words))
+            {
+                words = wordsByCulture[culture] = new Dictionary<int, List<string>>();
+                if (culture == "ru-RU")
+                {
+                    var stream = typeof(TextProvider).Assembly.GetManifestResourceStream("GuessTheWord.TextFileDictionary.Resources.russian_nouns.txt");
+                    var allWords = SplitToLines(stream);
+                    foreach (var word in allWords)
+                    {
+                        if (!words.TryGetValue(word.Length, out var lst))
+                        {
+                            words[word.Length] = lst = new List<string>();
+                        }
+
+                        lst.Add(word.ToLower());
+                    }
+                }
+            }
+
+            return words;
         }
 
         private static IEnumerable<string> SplitToLines(Stream stream)

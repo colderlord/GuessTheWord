@@ -20,7 +20,7 @@ namespace GuessTheWord.GuessGame.Providers
         /// <inheritdoc />
         public IGame CreateGame(IRule rule, IDictionaryProvider provider, IAlphabet alphabet)
         {
-            throw new NotImplementedException();
+            return new Games.GuessGame(rule, provider, alphabet);
         }
     }
 }

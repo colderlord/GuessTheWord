@@ -1,6 +1,7 @@
 ﻿using System;
 using GuessTheWord.Abstractions.Models;
 using GuessTheWord.Abstractions.Providers;
+using GuessTheWord.Words.Games;
 
 namespace GuessTheWord.Words.Providers
 {
@@ -20,7 +21,7 @@ namespace GuessTheWord.Words.Providers
         /// <inheritdoc />
         public IGame CreateGame(IRule rule, IDictionaryProvider provider, IAlphabet alphabet)
         {
-            throw new NotImplementedException();
+            return new WordsGame(rule, provider, alphabet);
         }
     }
 }

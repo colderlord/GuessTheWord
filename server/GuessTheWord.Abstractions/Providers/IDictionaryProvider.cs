@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GuessTheWord.Abstractions.Models;
 
 namespace GuessTheWord.Abstractions.Providers
 {
@@ -19,5 +18,13 @@ namespace GuessTheWord.Abstractions.Providers
         /// <param name="request">Запрос на поиск слов</param>
         /// <returns>Список слов</returns>
         IEnumerable<string> GetWords(ISearchRequest request);
+
+        /// <summary>
+        /// Есть ли такое слово в словаре
+        /// </summary>
+        /// <param name="word">Слово</param>
+        /// <param name="culture">Культура</param>
+        /// <returns><c>true</c>, если такое слово есть в словаре</returns>
+        bool HasWord(string word, string culture);
     }
 }
