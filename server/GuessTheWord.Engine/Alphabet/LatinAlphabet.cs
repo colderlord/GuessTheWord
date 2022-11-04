@@ -12,7 +12,7 @@ namespace GuessTheWord.Engine.Alphabet
         /// <inheritdoc />
         public bool CheckCulture(string culture)
         {
-            return culture == "en_GB" || culture == "en_US" || culture == "en";
+            return culture == "en-GB" || culture == "en-US";
         }
 
         /// <inheritdoc />

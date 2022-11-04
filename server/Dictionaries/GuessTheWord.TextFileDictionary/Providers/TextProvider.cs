@@ -12,7 +12,7 @@ namespace GuessTheWord.TextFileDictionary.Providers
     /// </summary>
     internal sealed class TextProvider : IDictionaryProvider
     {
-        private readonly string[] languages = {"ru_RU", "ru"};
+        private readonly string[] languages = {"ru-RU"};
         private readonly Dictionary<string, Dictionary<int, List<string>>> wordsByCulture = new();
         
         /// <inheritdoc />

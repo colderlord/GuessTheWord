@@ -15,7 +15,7 @@ namespace GuessTheWord.Engine.Services
         private readonly IEnumerable<IDictionaryProvider> providers;
         private readonly IEnumerable<IAlphabet> alphabets;
         private readonly IEnumerable<IGameProvider> gameProviders;
-        private readonly IRule defaultRule = new Rule("ru_RU", 5, 6);
+        private readonly IRule defaultRule = new Rule("ru-RU", 5, 6);
         private readonly ConcurrentDictionary<Guid, IGame> games = new();
 
         /// <summary>
