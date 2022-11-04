@@ -2,12 +2,13 @@ import * as React from 'react';
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { observer } from 'mobx-react';
-
-import { Settings } from "../interfaces/Settings"
+import Autocomplete from "@mui/material/Autocomplete";
+import {observer} from 'mobx-react';
+import {Storage} from "../storage/Storage";
+import {GameInfo} from "../interfaces/GameInfo";
 
 export interface RulesProps {
-    settings: Settings;
+    storage: Storage
 }
 
 function Rules(props: RulesProps) {
@@ -22,7 +23,7 @@ function Rules(props: RulesProps) {
             return;
         }
 
-        props.settings.SetLettersCount(numberValue)
+        props.storage.settings.SetLettersCount(numberValue)
     }
 
     function onChangeAttempts(e: any) {
@@ -36,7 +37,11 @@ function Rules(props: RulesProps) {
             return;
         }
 
-        props.settings.SetAttemptsCount(numberValue)
+        props.storage.settings.SetAttemptsCount(numberValue)
+    }
+
+    function onChangeGame(e: GameInfo) {
+        props.storage.setCurrentGame(e);
     }
 
     return (
@@ -46,20 +51,40 @@ function Rules(props: RulesProps) {
             </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
+                    <Autocomplete
+                        id="game-selector"
+                        value={props.storage.currentGameInfo}
+                        onChange={(event: any, newValue: GameInfo) => {
+                            onChangeGame(newValue);
+                        }}
+                        defaultValue={props.storage.currentGameInfo}
+                        disableClearable={true}
+                        options={props.storage.gameInfos}
+                        getOptionLabel={(option) => option.name}
+                        onOpen={() => {
+                            props.storage.getGameInfosAsync();
+                        }}
+                        // sx={{ width: 300 }}
+                        renderInput={(params) => <TextField {...params} label="Выберите игру" />}
+                    />
+                </Grid>
+                <Grid item xs={12}>
                     <TextField
+                        fullWidth
                         type={"number"}
                         id="lettersCount"
                         label="Количество букв"
-                        value={props.settings.LettersCount}
+                        value={props.storage.settings.lettersCount}
                         onChange={onChangeLettersCount}
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        fullWidth
                         type={"number"}
                         id="lettersCount"
                         label="Количество слов"
-                        value={props.settings.Attempts}
+                        value={props.storage.settings.attempts}
                         onChange={onChangeAttempts}
                     />
                 </Grid>

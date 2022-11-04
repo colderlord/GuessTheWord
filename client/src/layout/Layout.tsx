@@ -13,8 +13,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Link from "@mui/material/Link";
 import GlobalStyles from '@mui/material/GlobalStyles';
 
-import { Storage } from "../storage/Storage";
+import {LangInfo, Storage} from "../storage/Storage";
 import { Settings } from "../interfaces/Settings";
+import {GameInfo} from "../interfaces/GameInfo";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -29,28 +32,33 @@ function ThemeSelector() {
 }
 
 interface LanguageSelectorProps {
-    settings: Settings
+    storage: Storage
 }
 
 function LanguageSelector(props: LanguageSelectorProps) {
-    function onChangeLanguage(e: any) : void {
-        props.settings.SetCulture(e.target.value);
+    function onChangeLanguage(langInfo: LangInfo) : void {
+        props.storage.setLang(langInfo)
     }
 
-    return (<FormControl sx={{ my: 1, mx: 1.5 }}>
-        <InputLabel id="language-select-label">Язык</InputLabel>
-        <Select
-            labelId="demo-language-select-label"
-            id="language-simple-select"
-            value={props.settings.Culture}
-            label="Язык"
+    return (
+        <Autocomplete
+            id="lang-selector"
             size={"small"}
-            onChange={onChangeLanguage}
-        >
-            <MenuItem value={"ru-RU"}>Русский</MenuItem>
-            <MenuItem value={"en-US"}>English</MenuItem>
-        </Select>
-    </FormControl>)
+            value={props.storage.currentLangInfo}
+            onChange={(event: any, newValue: LangInfo) => {
+                onChangeLanguage(newValue);
+            }}
+            defaultValue={props.storage.currentLangInfo}
+            disableClearable={true}
+            options={props.storage.languageInfos}
+            getOptionLabel={(option) => option.name}
+            onOpen={() => {
+                props.storage.getLanguagesInfosAsync();
+            }}
+            sx={{ width: 150 }}
+            renderInput={(params) => <TextField {...params} />}
+        />
+    )
 }
 
 function Copyright() {
@@ -114,7 +122,7 @@ export default function Render(props: LayoutProps) {
                         sx={{ flex: 1 }}
                     />
                     <ThemeSelector />
-                    <LanguageSelector settings={props.storage.Settings}/>
+                    <LanguageSelector storage={props.storage}/>
                 </Toolbar>
                 {props.children}
                 <Copyright />

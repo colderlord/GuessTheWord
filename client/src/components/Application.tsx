@@ -4,8 +4,8 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { observer } from 'mobx-react';
-import { Storage } from "../storage/Storage";
+import {observer} from 'mobx-react';
+import {Storage} from "../storage/Storage";
 
 import Rules from "./Rules";
 import Game from "./Game";
@@ -19,7 +19,7 @@ export interface ApplicationProps{
 function getStepContent(step: number, storage: Storage) {
     switch (step) {
         case 0:
-            return <Rules settings={storage.Settings}/>;
+            return <Rules storage={storage}/>;
         case 1:
             return <Game storage={storage}/>;
         default:
@@ -33,12 +33,18 @@ function Application(props: ApplicationProps) {
     const handleNext = () => {
         if (activeStep == steps.length - 1)
         {
-            props.storage.Clear();
+            props.storage.clear();
             setActiveStep(0);
         }
         else
         {
-            setActiveStep(activeStep + 1);
+            const check = props.storage.check();
+            if (check == "") {
+                props.storage.setGameModel(props.storage.currentGameInfo.uid);
+                setActiveStep(activeStep + 1);
+            } else {
+                
+            }
         }
     };
 

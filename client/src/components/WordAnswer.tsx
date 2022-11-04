@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Button from "@mui/material/Button";
+import {observer} from "mobx-react";
 import {Word} from "../interfaces/Word";
 import {Letter, LetterType} from "../interfaces/Letter";
 
@@ -28,13 +29,17 @@ function getButtonColor(letter: Letter) {
     }
 }
 
-export default function WordAnswer(props: WordAnswerProps) {
-
+function WordAnswer(props: WordAnswerProps) {
     return (
         <React.Fragment>
             {
                 props.word.letters.map((letter: Letter) => (
-                    <Button variant="contained" color={getButtonColor(letter)} sx={{ mt: 3, ml: 1 }}>
+                    <Button
+                        key={"leter" + letter.letter + letter.position + props.word.stringValue}
+                        variant="contained"
+                        color={getButtonColor(letter)}
+                        sx={{ mt: 3, ml: 1 }}
+                    >
                         {letter.letter}
                     </Button>
                 ))
@@ -42,3 +47,5 @@ export default function WordAnswer(props: WordAnswerProps) {
         </React.Fragment>
     )
 }
+
+export default observer(WordAnswer)
