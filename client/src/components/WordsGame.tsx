@@ -5,5 +5,5 @@ export interface WordsGameProps {
 }
 
 export default function WordsGame(props: WordsGameProps) {
-    return (<div></div>)
+    return (<div>В разработке</div>)
 }

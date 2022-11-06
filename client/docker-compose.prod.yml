@@ -1,0 +1,11 @@
+﻿version: '3.7'
+
+services:
+
+  sample-prod:
+    container_name: guesstheword_client-prod
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - '1337:80'

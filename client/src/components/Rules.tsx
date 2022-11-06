@@ -61,8 +61,8 @@ function Rules(props: RulesProps) {
                         disableClearable={true}
                         options={props.storage.gameInfos}
                         getOptionLabel={(option) => option.name}
-                        onOpen={() => {
-                            props.storage.getGameInfosAsync();
+                        onOpen={async () => {
+                            await props.storage.getGameInfosAsync();
                         }}
                         // sx={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Выберите игру" />}

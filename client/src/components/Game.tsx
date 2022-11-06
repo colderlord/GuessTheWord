@@ -13,6 +13,7 @@ import {Storage} from "../storage/Storage";
 import TryGuessGame from "./TryGuessGame";
 import GuessGame from "./GuessGame";
 import WordsGame from "./WordsGame";
+import {GuessGameUid, TryGuessGameUid, WordsGameUid} from "../storage/Constants";
 
 export interface GameProps {
     storage: Storage;
@@ -61,13 +62,13 @@ function Game(props: GameProps) {
 
     function GetGame() {
         switch (props.storage.currentGameInfo.uid) {
-            case "793370cf-7ea5-4d45-af27-65def7293e40": {
-                return (<GuessGame storage={props.storage}/>);
-            }
-            case "b32bb668-5448-4b1b-89c9-31138bc6eb63": {
+            case TryGuessGameUid: {
                 return (<TryGuessGame game={props.storage.gameModel}/>);
             }
-            case "b5451229-e47d-4fca-ad1b-c787c34d6279": {
+            case GuessGameUid: {
+                return (<GuessGame game={props.storage.gameModel}/>);
+            }
+            case WordsGameUid: {
                 return (<WordsGame storage={props.storage}/>);
             }
             default: {

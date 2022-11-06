@@ -6,18 +6,13 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import Link from "@mui/material/Link";
 import GlobalStyles from '@mui/material/GlobalStyles';
-
-import {LangInfo, Storage} from "../storage/Storage";
-import { Settings } from "../interfaces/Settings";
-import {GameInfo} from "../interfaces/GameInfo";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+
+import {LangInfo, Storage} from "../storage/Storage";
+import {observer} from "mobx-react";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -52,8 +47,8 @@ function LanguageSelector(props: LanguageSelectorProps) {
             disableClearable={true}
             options={props.storage.languageInfos}
             getOptionLabel={(option) => option.name}
-            onOpen={() => {
-                props.storage.getLanguagesInfosAsync();
+            onOpen={async () => {
+                await props.storage.getLanguagesInfosAsync();
             }}
             sx={{ width: 150 }}
             renderInput={(params) => <TextField {...params} />}
@@ -86,7 +81,7 @@ export interface LayoutProps {
     storage: Storage;
 }
 
-export default function Render(props: LayoutProps) {
+function Layout(props: LayoutProps) {
     const [mode, setMode] = React.useState<'light' | 'dark'>('light');
     const colorMode = React.useMemo(
         () => ({
@@ -130,3 +125,5 @@ export default function Render(props: LayoutProps) {
         </ColorModeContext.Provider>
     );
 }
+
+export default observer(Layout)

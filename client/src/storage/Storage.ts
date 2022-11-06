@@ -3,16 +3,11 @@ import {Letter, LetterType} from "../interfaces/Letter";
 import {Word} from '../interfaces/Word'
 import {Settings} from '../interfaces/Settings'
 import GuessTheWordService from "../services/GuessTheWordService";
+import GameModel from "./Games/GameModel";
 
 export class Storage {
-    defaultGameInfo = {
-        uid: "",
-        name: "Не выбрано"
-    };
-    defaultLanguage = {
-        culture: "ru-RU",
-        name: "Русский"
-    };
+    defaultGameInfo = new GameInfo("Не выбрано", "");
+    defaultLanguage = new LangInfo("Русский", "ru-RU");
 
     constructor() {
         makeAutoObservable(this);
@@ -35,21 +30,10 @@ export class Storage {
 
     getGameInfosAsync = async () => {
         if (this.gameInfos.length <= 1) {
-            //const res = await this.guessTheWordService.getAvailableGames();
-            const res =   [{
-                    name: "Ты пытаешься отгадать слово",
-                    uid: "793370cf-7ea5-4d45-af27-65def7293e40"
-                },
-                {
-                    name: "Я (компьютер) пытаюсь отгадать слово",
-                    uid: "b32bb668-5448-4b1b-89c9-31138bc6eb63"
-                },
-                {
-                    name: "Игра в слова",
-                    uid: "b5451229-e47d-4fca-ad1b-c787c34d6279"
-                }];
+            const res = await this.guessTheWordService.getAvailableGames();
             runInAction(() => {
-                this.setGameInfos(res);
+                const gameInfos = res.map((v: any) => new GameInfo(v.name, v.uid))
+                this.setGameInfos(gameInfos);
             });
         }
 
@@ -57,35 +41,39 @@ export class Storage {
     };
     getLanguagesInfosAsync = async () => {
         if (this.languageInfos.length <= 1) {
-            //const res = await this.guessTheWordService.getAvailableLanguages();
-            const res = [{
-                culture: "ru-RU",
-                name: "Русский"
-            },
-                {
-                    culture: "en-US",
-                    name: "English"
-                }];
+            const res = await this.guessTheWordService.getAvailableLanguages();
             runInAction(() => {
-                this.setLangInfos(res);
+                const langInfos = res.map((v: any) => new LangInfo(v.name, v.language))
+                this.setLangInfos(langInfos);
             });
         }
 
-        return this.gameInfos;
+        return this.languageInfos;
     };
     setCurrentGame(gameInfo: GameInfo) {
         this.currentGameInfo = gameInfo;
     }
     setGameInfos(gameInfos: GameInfo[]) {
+        this.gameInfos.splice(0);
+        this.gameInfos.push(this.defaultGameInfo);
         this.gameInfos.push(...gameInfos);
     }
-    setGameModel(uid: string) {
-        this.gameModel = new GameModel(uid, this.settings);
+    async setGameModel(uid: string) {
+        await this.guessTheWordService.setRules(uid, this.settings);
+        runInAction(() => {
+            this.gameModel = new GameModel(uid, this.settings, this.guessTheWordService);
+        });
     }
-    clear() {
-        this.gameModel = undefined;
-        this.currentGameInfo = this.defaultGameInfo;
-        this.settings = new SettingsModel();
+    clear = async () => {
+        const gameModel = this.gameModel;
+        if (gameModel) {
+            await this.guessTheWordService.restart(gameModel.uid);
+        }
+        runInAction(() => {
+            this.gameModel = undefined;
+            this.currentGameInfo = this.defaultGameInfo;
+            this.settings = new SettingsModel();
+        });
     }
     check() : string {
         if (!this.currentGameInfo.uid) {
@@ -113,50 +101,22 @@ export class Storage {
     }
 }
 
-export class GameModel {
-    constructor(uid: string, settings: SettingsModel) {
-        makeAutoObservable(this);
-        this.uid = uid;
-        this.settings = settings;
-    }
-
-    settings: SettingsModel;
-    uid: string;
-    wordModel: Word[] = [];
-    AddWord(value: string) {
-        if (this.settings.attempts == this.wordModel.length) {
-            return;
-        }
-
-        const val = value.toLowerCase();
-        const chars = value.toLowerCase().split('');
-        const word = new WordModel();
-        word.stringValue = val;
-        chars.map((v, index) => {
-            const letter = new LetterModel();
-            letter.letter = v;
-            var res = Math.floor((Math.random() * 4) + 1);
-            letter.letterType = res;
-            letter.position = index;
-            word.letters.push(letter);
-        });
-        this.wordModel.push(word);
-        // отправить на сервер
-    }
-    Clear() {
-        this.wordModel = [];
-    }
-    SetUid(uid: string) {
-        this.uid = uid;
-    }
-}
-
 export class LangInfo {
+    constructor(name: string,  culture: string) {
+        makeAutoObservable(this);
+        this.name = name;
+        this.culture = culture;
+    }
     name: string = "";
     culture: string = "";
 }
 
 export class GameInfo {
+    constructor(name: string, uid: string) {
+        makeAutoObservable(this);
+        this.name = name;
+        this.uid = uid;
+    }
     name: string = "";
     uid: string = "";
 }

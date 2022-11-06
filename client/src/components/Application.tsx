@@ -30,7 +30,7 @@ function getStepContent(step: number, storage: Storage) {
 function Application(props: ApplicationProps) {
     const [activeStep, setActiveStep] = React.useState(0);
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (activeStep == steps.length - 1)
         {
             props.storage.clear();
@@ -40,10 +40,10 @@ function Application(props: ApplicationProps) {
         {
             const check = props.storage.check();
             if (check == "") {
-                props.storage.setGameModel(props.storage.currentGameInfo.uid);
+                await props.storage.setGameModel(props.storage.currentGameInfo.uid);
                 setActiveStep(activeStep + 1);
             } else {
-                
+                console.error("Ошибка в настройках")
             }
         }
     };
