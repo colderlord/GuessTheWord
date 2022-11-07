@@ -36,7 +36,7 @@ namespace GuessTheWord.Engine.Services
         {
             if (games.TryGetValue(gameType, out var game))
             {
-                throw new Exception("Игра уже началась. Сбросьте игру, либо продолжите существующую");
+                Restart(gameType);
             }
 
             var rule = new Rule(locale, lettersCount, attempts);
@@ -69,7 +69,7 @@ namespace GuessTheWord.Engine.Services
 
         private IAlphabet GetAlphabet(string culture)
         {
-            var alphabet = alphabets.FirstOrDefault(a => a.CheckCulture(culture));
+            var alphabet = alphabets.FirstOrDefault(a => a.Culture == culture);
             if (alphabet == null)
             {
                 return null;

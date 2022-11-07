@@ -1,4 +1,4 @@
-import {makeAutoObservable, runInAction} from "mobx"
+import {makeAutoObservable, runInAction, action} from "mobx"
 import {Letter, LetterType} from "../interfaces/Letter";
 import {Word} from '../interfaces/Word'
 import {Settings} from '../interfaces/Settings'
@@ -32,7 +32,7 @@ export class Storage {
         if (this.gameInfos.length <= 1) {
             const res = await this.guessTheWordService.getAvailableGames();
             runInAction(() => {
-                const gameInfos = res.map((v: any) => new GameInfo(v.name, v.uid))
+                const gameInfos = res.map((v: any) => new GameInfo(v.name, v.uid));
                 this.setGameInfos(gameInfos);
             });
         }
@@ -43,7 +43,7 @@ export class Storage {
         if (this.languageInfos.length <= 1) {
             const res = await this.guessTheWordService.getAvailableLanguages();
             runInAction(() => {
-                const langInfos = res.map((v: any) => new LangInfo(v.name, v.language))
+                const langInfos = res.map((v: any) => new LangInfo(v.name, v.culture))
                 this.setLangInfos(langInfos);
             });
         }

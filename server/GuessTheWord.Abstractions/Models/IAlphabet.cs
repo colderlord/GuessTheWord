@@ -6,11 +6,14 @@
     public interface IAlphabet : IExtension
     {
         /// <summary>
-        /// Проверить локаль
+        /// Наименование
         /// </summary>
-        /// <param name="culture">Локаль</param>
-        /// <returns><c>true</c>, если локаль подходит</returns>
-        bool CheckCulture(string culture);
+        string Name { get; }
+
+        /// <summary>
+        /// Локаль
+        /// </summary>
+        string Culture { get; }
 
         /// <summary>
         /// Буквы алфавита

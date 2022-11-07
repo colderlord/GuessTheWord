@@ -1,7 +1,5 @@
 ﻿import {SettingsModel} from "../storage/Storage";
-import {WordsGameUid} from "../storage/Constants";
 
-const serverName = "http://localhost:8000"
 const webApiUrl = "/api/GuessTheWord";
 
 class GuessTheWordService {

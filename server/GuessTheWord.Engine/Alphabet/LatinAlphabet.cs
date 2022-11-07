@@ -10,10 +10,10 @@ namespace GuessTheWord.Engine.Alphabet
         private static readonly char[] AlphabetLet = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
 
         /// <inheritdoc />
-        public bool CheckCulture(string culture)
-        {
-            return culture == "en-GB" || culture == "en-US";
-        }
+        public string Name => "English";
+
+        /// <inheritdoc />
+        public string Culture => "en-US";
 
         /// <inheritdoc />
         public char[] AlphabetLetters => AlphabetLet;
