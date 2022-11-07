@@ -1,7 +1,8 @@
 export interface Letter {
     letter: string,
     letterType: LetterType,
-    position: number
+    position: number,
+    setLetterType(letType: LetterType) : void
 }
 
 export enum LetterType {

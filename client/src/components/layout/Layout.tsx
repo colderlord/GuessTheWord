@@ -11,7 +11,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
-import {LangInfo, Storage} from "../storage/Storage";
+import {LangInfo, Storage} from "../../storage/Storage";
 import {observer} from "mobx-react";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
@@ -45,10 +45,11 @@ function LanguageSelector(props: LanguageSelectorProps) {
             }}
             defaultValue={props.storage.currentLangInfo}
             disableClearable={true}
-            options={props.storage.languageInfos}
+            loading={props.storage.langInfosStorage.loadingInfos}
+            options={props.storage.langInfosStorage.languageInfos}
             getOptionLabel={(option) => option.name}
             onOpen={async () => {
-                await props.storage.getLanguagesInfosAsync();
+                await props.storage.langInfosStorage.getLanguagesInfosAsync();
             }}
             sx={{ width: 150 }}
             renderInput={(params) => <TextField {...params} />}
@@ -70,12 +71,6 @@ function Copyright() {
 }
 
 export interface LayoutProps {
-    /**
-     * Children of layout
-     *
-     * @type {React.ReactNode}
-     * @memberof LayoutProps
-     */
     children?: React.ReactNode;
 
     storage: Storage;

@@ -2,10 +2,10 @@
 import Grid from "@mui/material/Grid";
 import {observer} from "mobx-react";
 import WordAnswer from "./WordAnswer";
-import GameModel from "../storage/Games/GameModel";
+import TryGuessGameModel from "../storage/Games/TryGuessGameModel";
 
 export interface GuessGameProps {
-    game?: GameModel;
+    game?: TryGuessGameModel;
 }
 
 function GuessGame(props: GuessGameProps) {

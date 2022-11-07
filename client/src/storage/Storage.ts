@@ -1,67 +1,40 @@
-import {makeAutoObservable, runInAction, action} from "mobx"
+import {makeAutoObservable, runInAction} from "mobx"
 import {Letter, LetterType} from "../interfaces/Letter";
 import {Word} from '../interfaces/Word'
 import {Settings} from '../interfaces/Settings'
 import GuessTheWordService from "../services/GuessTheWordService";
-import GameModel from "./Games/GameModel";
+import TryGuessGameModel from "./Games/TryGuessGameModel";
+import {GameInfoStorage} from "./GameInfoStorage";
+import {LangInfoStorage} from "./LangInfoStorage";
 
 export class Storage {
-    defaultGameInfo = new GameInfo("Не выбрано", "");
-    defaultLanguage = new LangInfo("Русский", "ru-RU");
 
     constructor() {
         makeAutoObservable(this);
         this.guessTheWordService = new GuessTheWordService();
+        this.gameInfosStorage = new GameInfoStorage(this.guessTheWordService);
+        this.langInfosStorage = new LangInfoStorage(this.guessTheWordService);
         this.settings = new SettingsModel();
-        this.currentGameInfo = this.defaultGameInfo;
-        this.gameInfos = [this.currentGameInfo];
-        this.currentLangInfo = this.defaultLanguage;
-        this.languageInfos = [this.currentLangInfo];
+        this.currentGameInfo = this.gameInfosStorage.defaultGameInfo;
+        this.currentLangInfo = this.langInfosStorage.defaultLanguage;
     }
 
     guessTheWordService: GuessTheWordService;
+    gameInfosStorage: GameInfoStorage;
+    langInfosStorage: LangInfoStorage;
 
     currentGameInfo: GameInfo;
-    gameInfos: GameInfo[] = [];
     currentLangInfo: LangInfo;
-    languageInfos: LangInfo[] = [];
     settings: Settings;
-    gameModel?: GameModel = undefined;
+    gameModel?: TryGuessGameModel = undefined;
 
-    getGameInfosAsync = async () => {
-        if (this.gameInfos.length <= 1) {
-            const res = await this.guessTheWordService.getAvailableGames();
-            runInAction(() => {
-                const gameInfos = res.map((v: any) => new GameInfo(v.name, v.uid));
-                this.setGameInfos(gameInfos);
-            });
-        }
-
-        return this.gameInfos;
-    };
-    getLanguagesInfosAsync = async () => {
-        if (this.languageInfos.length <= 1) {
-            const res = await this.guessTheWordService.getAvailableLanguages();
-            runInAction(() => {
-                const langInfos = res.map((v: any) => new LangInfo(v.name, v.culture))
-                this.setLangInfos(langInfos);
-            });
-        }
-
-        return this.languageInfos;
-    };
     setCurrentGame(gameInfo: GameInfo) {
         this.currentGameInfo = gameInfo;
-    }
-    setGameInfos(gameInfos: GameInfo[]) {
-        this.gameInfos.splice(0);
-        this.gameInfos.push(this.defaultGameInfo);
-        this.gameInfos.push(...gameInfos);
     }
     async setGameModel(uid: string) {
         await this.guessTheWordService.setRules(uid, this.settings);
         runInAction(() => {
-            this.gameModel = new GameModel(uid, this.settings, this.guessTheWordService);
+            this.gameModel = new TryGuessGameModel(uid, this.settings, this.guessTheWordService);
         });
     }
     clear = async () => {
@@ -71,7 +44,7 @@ export class Storage {
         }
         runInAction(() => {
             this.gameModel = undefined;
-            this.currentGameInfo = this.defaultGameInfo;
+            this.currentGameInfo = this.gameInfosStorage.defaultGameInfo;
             this.settings = new SettingsModel();
         });
     }
@@ -90,10 +63,6 @@ export class Storage {
         }
 
         return "";
-    }
-    setLangInfos(langInfos: LangInfo[]) {
-        this.languageInfos.splice(0);
-        this.languageInfos.push(...langInfos);
     }
     setLang(lang: LangInfo) {
         this.currentLangInfo = lang;
@@ -149,8 +118,19 @@ export class WordModel implements Word {
     }
 
     stringValue: string = "";
-
     letters: Letter[] = [];
+
+    setStringValue(val: string) {
+        this.stringValue = val;
+        const chars = val.split('');
+        chars.map((c, index) => {
+            const letter = new LetterModel();
+            letter.letter = c;
+            letter.letterType = LetterType.None;
+            letter.position = index;
+            this.letters.push(letter);
+        })
+    }
 }
 
 export class LetterModel implements Letter {
@@ -161,4 +141,8 @@ export class LetterModel implements Letter {
     letter = "";
     letterType = LetterType.Default;
     position = -1;
+
+    setLetterType(letType: LetterType): void {
+        this.letterType = letType;
+    }
 }

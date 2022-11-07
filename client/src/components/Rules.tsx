@@ -59,13 +59,15 @@ function Rules(props: RulesProps) {
                         }}
                         defaultValue={props.storage.currentGameInfo}
                         disableClearable={true}
-                        options={props.storage.gameInfos}
+                        loading={props.storage.gameInfosStorage.loadingInfos}
+                        options={props.storage.gameInfosStorage.gameInfos}
                         getOptionLabel={(option) => option.name}
                         onOpen={async () => {
-                            await props.storage.getGameInfosAsync();
+                            await props.storage.gameInfosStorage.getGameInfosAsync();
                         }}
-                        // sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Выберите игру" />}
+                        renderInput={(params) => {
+                            return (<TextField {...params} label="Выберите игру" />);
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12}>

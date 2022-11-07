@@ -6,6 +6,7 @@ import {Letter, LetterType} from "../interfaces/Letter";
 
 export interface WordAnswerProps {
     word: Word;
+    editable?: boolean;
 }
 
 function getButtonColor(letter: Letter) {
@@ -30,6 +31,30 @@ function getButtonColor(letter: Letter) {
 }
 
 function WordAnswer(props: WordAnswerProps) {
+    function onClick(letter: Letter) {
+        if (!props.editable) {
+            return;
+        }
+
+        switch (letter.letterType) {
+            case LetterType.None:
+            {
+                letter.letterType = LetterType.Any;
+                break;
+            }
+            case LetterType.Any:
+            {
+                letter.letterType = LetterType.Fixed;
+                break;
+            }
+            case LetterType.Fixed:
+            {
+                letter.letterType = LetterType.None;
+                break;
+            }
+        }
+    }
+    
     return (
         <React.Fragment>
             {
@@ -38,6 +63,7 @@ function WordAnswer(props: WordAnswerProps) {
                         key={"leter" + letter.letter + letter.position + props.word.stringValue}
                         variant="contained"
                         color={getButtonColor(letter)}
+                        onClick={() => onClick(letter)}
                         sx={{ mt: 3, ml: 1 }}
                     >
                         {letter.letter}

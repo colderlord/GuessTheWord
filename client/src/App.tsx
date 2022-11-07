@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import Layout from './layout/Layout';
+import Layout from './components/layout/Layout';
 import Application from './components/Application';
 import './App.css';
 import { Storage } from "./storage/Storage";

@@ -8,7 +8,7 @@ import {observer} from 'mobx-react';
 import {Storage} from "../storage/Storage";
 
 import Rules from "./Rules";
-import Game from "./Game";
+import TryGuessGame from "./TryGuessGame";
 
 const steps = ['Правила', 'Игра'];
 
@@ -21,7 +21,7 @@ function getStepContent(step: number, storage: Storage) {
         case 0:
             return <Rules storage={storage}/>;
         case 1:
-            return <Game storage={storage}/>;
+            return <TryGuessGame storage={storage}/>;
         default:
             throw new Error('Unknown step');
     }
