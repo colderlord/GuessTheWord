@@ -3,10 +3,10 @@ using System.Linq;
 using GuessTheWord.Abstractions.Models;
 using GuessTheWord.Abstractions.Searcher;
 
-namespace GuessTheWord.TryGuessGame.Searcher
+namespace GuessTheWord.Engine.Searcher
 {
     /// <inheritdoc />
-    internal sealed class WordSearcher : IWordSearcher
+    public sealed class WordSearcher : IWordSearcher
     {
         private List<string> words;
 

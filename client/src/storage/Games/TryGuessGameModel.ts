@@ -1,10 +1,12 @@
-﻿import {Word} from "../../interfaces/Word";
-import {SettingsModel, WordModel} from "../Storage";
+﻿import {action, makeObservable, observable, runInAction} from "mobx";
+
+import {Word} from "../../interfaces/Word";
+import {SettingsModel} from "../Storage";
 import GuessTheWordService from "../../services/GuessTheWordService";
-import {action, makeObservable, observable, runInAction} from "mobx";
 import {SendWordResponse} from "../../interfaces/SendWordResponse";
 import {LetterType} from "../../interfaces/Letter";
 import GameModel from "./GameModel";
+import {WordModel} from "../WordModel";
 
 export default class TryGuessGameModel extends GameModel{
     constructor(uid: string, settings: SettingsModel, guessTheWordService: GuessTheWordService) {
@@ -50,6 +52,7 @@ export default class TryGuessGameModel extends GameModel{
             }
         })
 
+        this.setError("");
         try {
             // Отправить на сервер
             const res = await this.guessTheWordService.sendAnswer(this.uid, val) as SendWordResponse;
@@ -59,23 +62,35 @@ export default class TryGuessGameModel extends GameModel{
             });
         }
         catch (e) {
+            runInAction(() => {
+                this.setError(e as string);
+            });
         }
     }
 
     AddWord = async(value: string) => {
         if (this.settings.attempts === this.wordModel.length) {
+            this.setError("Количество попыток превышает количество попыток в настройках");
             return;
         }
 
+        this.setError("");
         const val = value.toLowerCase();
         try {
             // Отправить на сервер
             const res = await this.guessTheWordService.sendAnswer(this.uid, val) as SendWordResponse;
             runInAction(() => {
-                this.SetAnswers(res.result);
+                if (res.success === true) {
+                    this.SetAnswers(res.result);
+                } else {
+                    this.setError(res.reason);
+                }
             });
         }
         catch (e) {
+            runInAction(() => {
+                this.setError(e as string);
+            });
         }
     }
     SetAnswers(answers: string[]) {

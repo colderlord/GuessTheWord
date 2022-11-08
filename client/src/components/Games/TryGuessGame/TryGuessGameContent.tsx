@@ -8,12 +8,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import Divider from "@mui/material/Divider";
+
 import WordAnswer from "../../WordAnswer";
 import TryGuessGameModel from "../../../storage/Games/TryGuessGameModel";
-import {WordModel} from "../../../storage/Storage";
+import {WordModel} from "../../../storage/WordModel";
 
 export interface TryGuessGameContentProps {
-    game?: TryGuessGameModel;
+    game: TryGuessGameModel;
     loading: boolean;
     onSelect(word: WordModel) : void;
 }
@@ -24,12 +25,9 @@ function TryGuessGameContent(props: TryGuessGameContentProps) {
 
     function onWordClick(word: string) {
         const w = new WordModel();
-        w.setStringValue(word);
+        w.setStringValue(word, true);
         setWord(w);
-        const game = props.game;
-        if (game) {
-            game.SetAnswers([]);
-        }
+        props.game.SetAnswers([]);
     }
 
     function confirm(word: WordModel) {
@@ -39,90 +37,85 @@ function TryGuessGameContent(props: TryGuessGameContentProps) {
     }
 
     function gameContent() {
-        const game = props.game;
-        if (game) {
-            let progressContent;
-            if (props.loading) {
-                progressContent = <Grid container>
-                    <Grid item xs={12}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <CircularProgress/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>;
-            }
-            const answersContent = <><Grid container>
+        let progressContent;
+        if (props.loading) {
+            progressContent = <Grid container>
                 <Grid item xs={12}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            {selectedWord
-                                ? <>
-                                    <WordAnswer word={selectedWord} editable />
-                                    <IconButton color="primary" sx={{ mt: 3, ml: 1 }} aria-label="directions" onClick={() => confirm(selectedWord)}>
-                                        <AddIcon />
-                                    </IconButton>
-                                    <Divider orientation="horizontal" />
-                                    </>
-                                : <></>
-                            }
+                            <CircularProgress/>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-            <Grid container>
-                <Grid item xs={12}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            {
-                                confirmedWords.reverse().map((w) => {
-                                    return (
-                                        <>
-                                            <WordAnswer word={w}/>
-                                            <Divider orientation="horizontal" />
-                                        </>
-                                    );
-                                })
-                            }
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-            </>
-            
-            const answersListContent = <Grid container>
-                <Grid item xs={12}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                    <List dense>
-                        {
-                            game.answers.map((answer) => (
-                                <ListItemButton onClick={() => onWordClick(answer)}>
-                                    <ListItemText primary={answer}/>
-                                </ListItemButton>
-                            ))
-                        }
-                    </List>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-            return <React.Fragment>
-                {
-                    game.wordModel.map((word) => (
-                        <Grid key={word.stringValue} item xs={12}>
-                            <WordAnswer key={word.stringValue} word={word}/>
-                        </Grid>
-                    ))
-                }
-                {progressContent}
-                {answersContent}
-                {answersListContent}
-            </React.Fragment>
+            </Grid>;
         }
-
-        return <></>
+        const answersContent = <><Grid container>
+            <Grid item xs={12}>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        {selectedWord
+                            ? <>
+                                <WordAnswer word={selectedWord} editable />
+                                <IconButton color="primary" sx={{ mt: 3, ml: 1 }} aria-label="directions" onClick={() => confirm(selectedWord)}>
+                                    <AddIcon />
+                                </IconButton>
+                                <Divider orientation="horizontal" />
+                                </>
+                            : <></>
+                        }
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid container>
+            <Grid item xs={12}>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        {
+                            confirmedWords.reverse().map((w) => {
+                                return (
+                                    <>
+                                        <WordAnswer word={w}/>
+                                        <Divider orientation="horizontal" />
+                                    </>
+                                );
+                            })
+                        }
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+        </>
+        
+        const answersListContent = <Grid container>
+            <Grid item xs={12}>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                <List dense>
+                    {
+                        props.game.answers.map((answer) => (
+                            <ListItemButton onClick={() => onWordClick(answer)}>
+                                <ListItemText primary={answer}/>
+                            </ListItemButton>
+                        ))
+                    }
+                </List>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+        return <React.Fragment>
+            {
+                props.game.wordModel.map((word) => (
+                    <Grid key={word.stringValue} item xs={12}>
+                        <WordAnswer key={word.stringValue} word={word}/>
+                    </Grid>
+                ))
+            }
+            {progressContent}
+            {answersContent}
+            {answersListContent}
+        </React.Fragment>
     }
 
     return (<React.Fragment>

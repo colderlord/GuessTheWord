@@ -1,10 +1,11 @@
 import * as React from 'react';
+import {observer} from 'mobx-react';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import {observer} from 'mobx-react';
+import Alert from "@mui/material/Alert";
 
 import {Storage} from "../storage/Storage";
 import {GuessGameUid, TryGuessGameUid, WordsGameUid} from "../storage/Constants";
@@ -12,6 +13,9 @@ import Rules from "./Rules";
 import TryGuessGame from "./Games/TryGuessGame/TryGuessGame";
 import GuessGame from "./Games/GuessGame/GuessGame";
 import WordsGame from "./Games/WordsGame/WordsGame";
+import TryGuessGameModel from "../storage/Games/TryGuessGameModel";
+import GuessGameModel from "../storage/Games/GuessGameModel";
+import WordsGameModel from "../storage/Games/WordsGameModel";
 
 const steps = ['Правила', 'Игра'];
 
@@ -28,13 +32,13 @@ function getStepContent(step: number, storage: Storage) {
             if (game) {
                 switch (game.uid) {
                     case TryGuessGameUid: {
-                        return <TryGuessGame storage={storage}/>;
+                        return <TryGuessGame gameModel={game as TryGuessGameModel}/>;
                     }
                     case GuessGameUid: {
-                        return <GuessGame storage={storage}/>;
+                        return <GuessGame gameModel={game as GuessGameModel}/>;
                     }
                     case WordsGameUid: {
-                        return <WordsGame storage={storage}/>;
+                        return <WordsGame gameModel={game as WordsGameModel}/>;
                     }
                 }
             }
@@ -72,6 +76,7 @@ function Application(props: ApplicationProps) {
                     Отгадай слово
                 </Typography>
                 <React.Fragment>
+                    {props.storage.gameModel && props.storage.gameModel.error ? <Alert severity="error">{props.storage.gameModel.error}</Alert> : <></>}
                     {getStepContent(activeStep, props.storage)}
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <Button

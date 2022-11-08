@@ -1,17 +1,17 @@
-import * as React from "react";
+﻿import * as React from 'react';
 import {observer} from "mobx-react";
 import Grid from "@mui/material/Grid";
 
-import GuessGameModel from "../../../storage/Games/GuessGameModel";
+import WordsGameModel from "../../../storage/Games/WordsGameModel";
 import WordAnswer from "../../WordAnswer";
 
-export interface GuessGameContentProps {
-    game: GuessGameModel;
+export interface WordsGameContentProps {
+    game: WordsGameModel;
     loading: boolean;
 }
 
-function GuessGameContent(props: GuessGameContentProps) {
-    return (
+function WordsGameContent(props: WordsGameContentProps) {
+    return (<React.Fragment>
         <React.Fragment>
             {
                 props.game.wordModel.slice().reverse().map((word) => (
@@ -21,8 +21,6 @@ function GuessGameContent(props: GuessGameContentProps) {
                 ))
             }
         </React.Fragment>
-    )
+    </React.Fragment>)
 }
-
-
-export default observer(GuessGameContent)
+export default observer(WordsGameContent)

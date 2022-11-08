@@ -1,10 +1,10 @@
 ﻿using System;
 using GuessTheWord.Abstractions.Models;
 
-namespace GuessTheWord.TryGuessGame.Searcher
+namespace GuessTheWord.Engine.Searcher
 {
     /// <inheritdoc />
-    internal sealed class SearchWordModel : ISearchWordModel
+    public sealed class SearchWordModel : ISearchWordModel
     {
         /// <summary>
         /// Ctor

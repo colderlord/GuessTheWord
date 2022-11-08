@@ -13,7 +13,7 @@
         /// <summary>
         /// Позиция
         /// </summary>
-        short? Position { get; }
+        int? Position { get; }
 
         /// <summary>
         /// Значение буквы

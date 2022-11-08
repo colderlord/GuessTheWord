@@ -101,7 +101,7 @@ namespace GuessTheWord.Words.Games
 
         private string GetWord(string word)
         {
-            var filteredWords = word == null ? allWords : allWords.Where(a => a.StartsWith(word[0]) && !usedWords.Contains(a)).ToList();
+            var filteredWords = word == null ? allWords : allWords.Where(a => a.StartsWith(word[^1]) && !usedWords.Contains(a)).ToList();
             if (filteredWords.Count == 0)
             {
                 return null;

@@ -1,19 +1,18 @@
 ﻿import * as React from 'react';
 import Grid from "@mui/material/Grid";
 import {observer} from "mobx-react";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
-import GuessGameContent from "./GuessGameContent";
-import GuessGameModel from "../../../storage/Games/GuessGameModel";
-import {Storage} from "../../../storage/Storage";
 import FormHelperText from "@mui/material/FormHelperText";
 
+import GuessGameContent from "./GuessGameContent";
+import GuessGameModel from "../../../storage/Games/GuessGameModel";
+
 export interface GuessGameProps {
-    storage: Storage;
+    gameModel: GuessGameModel;
 }
 
 function GuessGame(props: GuessGameProps) {
@@ -22,15 +21,15 @@ function GuessGame(props: GuessGameProps) {
     const [value, setValue] = React.useState<string>("");
 
     async function onAdd() {
-        const settings = props.storage.settings;
-        const gameModel = props.storage.gameModel as GuessGameModel;
+        const settings = props.gameModel.settings;
+        const gameModel = props.gameModel;
         if (gameModel) {
             if (settings.attempts == gameModel.wordModel.length) {
                 return;
             }
             setLoading(true);
             try {
-                //await gameModel.AddWord(value);
+                await gameModel.AddWord(value);
                 setLoading(false);
             }
             catch (e) {
@@ -53,9 +52,6 @@ function GuessGame(props: GuessGameProps) {
     }
 
     return (<React.Fragment>
-        <Typography variant="h6" gutterBottom>
-            Игра началась!
-        </Typography>
         <Grid container>
             <Grid item xs={12}>
                 <Grid container spacing={3}>
@@ -82,7 +78,7 @@ function GuessGame(props: GuessGameProps) {
                     </Grid>
                 </Grid>
             </Grid>
-            <GuessGameContent game={props.storage.gameModel as GuessGameModel} loading={loading} />
+            <GuessGameContent game={props.gameModel} loading={loading} />
         </Grid>
     </React.Fragment>)
 }

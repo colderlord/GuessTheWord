@@ -1,19 +1,19 @@
 import * as React from 'react';
 import {observer} from "mobx-react"
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import FormHelperText from "@mui/material/FormHelperText";
-import {Storage, WordModel} from "../../../storage/Storage";
+
 import TryGuessGameContent from "./TryGuessGameContent";
 import TryGuessGameModel from "../../../storage/Games/TryGuessGameModel";
+import {WordModel} from "../../../storage/WordModel";
 
 export interface TryGuessGameProps {
-    storage: Storage;
+    gameModel: TryGuessGameModel;
 }
 
 function TryGuessGame(props: TryGuessGameProps) {
@@ -22,8 +22,8 @@ function TryGuessGame(props: TryGuessGameProps) {
     const [loading, setLoading] = React.useState<boolean>(false);
     const [disabled, setDisabled] = React.useState<boolean>(false);
     async function onAdd() {
-        const settings = props.storage.settings;
-        const gameModel = props.storage.gameModel as TryGuessGameModel;
+        const settings = props.gameModel.settings;
+        const gameModel = props.gameModel;
         if (gameModel) {
             if (settings.attempts == gameModel.wordModel.length) {
                 return;
@@ -54,7 +54,7 @@ function TryGuessGame(props: TryGuessGameProps) {
     }
 
     async function onSelectWord(word: WordModel) {
-        const gameModel = props.storage.gameModel as TryGuessGameModel;
+        const gameModel = props.gameModel;
         if (gameModel) {
             setDisabled(true);
             setLoading(true);
@@ -68,9 +68,6 @@ function TryGuessGame(props: TryGuessGameProps) {
     }
 
     return(<React.Fragment>
-            <Typography variant="h6" gutterBottom>
-                Игра началась!
-            </Typography>
             <Grid container>
                 {disabled === false
                     ?
@@ -102,7 +99,7 @@ function TryGuessGame(props: TryGuessGameProps) {
                     </Grid>
                     : <></>
                 }
-                <TryGuessGameContent game={props.storage.gameModel as TryGuessGameModel} loading={loading} onSelect={onSelectWord} />
+                <TryGuessGameContent game={props.gameModel} loading={loading} onSelect={onSelectWord} />
             </Grid>
     </React.Fragment>)
 }

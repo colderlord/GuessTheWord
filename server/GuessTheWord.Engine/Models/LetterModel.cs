@@ -1,9 +1,9 @@
 ﻿using GuessTheWord.Abstractions.Models;
 
-namespace GuessTheWord.TryGuessGame.Games
+namespace GuessTheWord.Engine.Models
 {
     /// <inheritdoc />
-    internal sealed class LetterModel : ILetterModel
+    public sealed class LetterModel : ILetterModel
     {
         /// <summary>
         /// Ctor
@@ -21,7 +21,7 @@ namespace GuessTheWord.TryGuessGame.Games
         /// <param name="option">Опции буквы</param>
         /// <param name="position">Позиция</param>
         /// <param name="letter">Буква</param>
-        public LetterModel(LetterOption option, short position, char letter)
+        public LetterModel(LetterOption option, int position, char letter)
         {
             Option = option;
             Position = position;
@@ -32,7 +32,7 @@ namespace GuessTheWord.TryGuessGame.Games
         public LetterOption Option { get; }
 
         /// <inheritdoc />
-        public short? Position { get; }
+        public int? Position { get; }
 
         /// <inheritdoc />
         public char Value { get; }

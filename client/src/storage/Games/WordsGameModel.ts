@@ -1,31 +1,33 @@
-import {action, makeObservable, observable, runInAction} from "mobx";
+﻿import {action, makeObservable, observable, runInAction} from "mobx";
 
 import {SettingsModel} from "../Storage";
 import GuessTheWordService from "../../services/GuessTheWordService";
 import GameModel from "./GameModel";
-import {Word} from "../../interfaces/Word";
 import {SendWordResponse} from "../../interfaces/SendWordResponse";
+import {Word} from "../../interfaces/Word";
 import {WordModel} from "../WordModel";
-import {LetterModel} from "../LetterModel";
 
-export default class GuessGameModel extends GameModel {
+export default class WordsGameModel extends GameModel {
     constructor(uid: string, settings: SettingsModel, guessTheWordService: GuessTheWordService) {
-        super(uid, settings, guessTheWordService);
+        super(uid,  settings, guessTheWordService);
         makeObservable(this, {
-            wordModel: observable,
+            words: observable,
             AddWord: action
         });
+
+        this.words = [];
     }
 
+    words: string[];
     wordModel: Word[] = [];
     AddWord = async(value: string) => {
-        if (this.settings.attempts === this.wordModel.length) {
-            this.setError("Количество попыток превышает количество попыток в настройках");
+        const val = value.toLowerCase();
+        if (this.words.includes(val)) {
+            this.setError("Такое слово уже существует");
             return;
         }
 
         this.setError("");
-        const val = value.toLowerCase();
         try {
             // Отправить на сервер
             const res = await this.guessTheWordService.sendAnswer(this.uid, val) as SendWordResponse;
@@ -33,16 +35,15 @@ export default class GuessGameModel extends GameModel {
                 if (res.success === false) {
                     this.setError(res.reason);
                 } else {
-                    let word = "";
-                    const letters = res.result.map((r : any) => {
-                        const letterChar = r.value;
-                        word+= letterChar;
-                        return new LetterModel(letterChar, r.option, r.position);
-                    });
                     const wordModel = new WordModel();
-                    wordModel.setStringValue(word, false);
-                    wordModel.setLetters(letters);
+                    wordModel.setStringValue(value, true);
                     this.wordModel.push(wordModel);
+                    const result = res.result;
+                    const resultWordModel = new WordModel();
+                    resultWordModel.setStringValue(result, true);
+                    this.wordModel.push(resultWordModel);
+                    this.words.push(value);
+                    this.words.push(result);
                 }
             });
         }

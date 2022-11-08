@@ -55,7 +55,7 @@ namespace GuessTheWord.Engine.Services
         {
             var game = games.GetOrAdd(gameType, t => CreateGame(t, defaultRule));
 
-            return game.Play(word);
+            return game.Play(!string.IsNullOrWhiteSpace(word) ? word.ToLower() : "");
         }
 
         private IGame CreateGame(Guid gameType, IRule rule)

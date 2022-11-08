@@ -4,9 +4,9 @@ using System.Linq;
 using GuessTheWord.Abstractions.Models;
 using GuessTheWord.Abstractions.Providers;
 using GuessTheWord.Abstractions.Searcher;
+using GuessTheWord.Engine.Helpers;
 using GuessTheWord.Engine.Models;
-using GuessTheWord.TryGuessGame.Helpers;
-using GuessTheWord.TryGuessGame.Searcher;
+using GuessTheWord.Engine.Searcher;
 
 namespace GuessTheWord.TryGuessGame.Games
 {
@@ -48,13 +48,17 @@ namespace GuessTheWord.TryGuessGame.Games
                     calcAttempts = true;
                 }
             }
+            else if (word.Length != rule.LettersCount)
+            {
+                return GameResult.Fail("Длина слова не соответствует длине по правилам");
+            }
 
             if (calcAttempts)
             {
                 attempt += 1;
                 if (attempt > rule.Attempts)
                 {
-                    throw new Exception("Превышено количество попыток");
+                    return GameResult.Fail("Превышено количество попыток");
                 }
             }
 
@@ -78,7 +82,7 @@ namespace GuessTheWord.TryGuessGame.Games
             }
             else
             {
-                var letterModels = WordParser.ParseWord(word);
+                var letterModels = WordParser.ParseWord(word, rule.LettersCount);
                 foreach (var letterModel in letterModels)
                 {
                     usedLetters.Add(letterModel.Value);

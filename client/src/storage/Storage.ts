@@ -1,14 +1,13 @@
 import {makeAutoObservable, runInAction} from "mobx"
-import {Letter, LetterType} from "../interfaces/Letter";
-import {Word} from '../interfaces/Word'
 import {Settings} from '../interfaces/Settings'
 import GuessTheWordService from "../services/GuessTheWordService";
 import TryGuessGameModel from "./Games/TryGuessGameModel";
 import {GameInfoStorage} from "./GameInfoStorage";
 import {LangInfoStorage} from "./LangInfoStorage";
-import {GuessGameUid, TryGuessGameUid} from "./Constants";
+import {GuessGameUid, TryGuessGameUid, WordsGameUid} from "./Constants";
 import GuessGameModel from "./Games/GuessGameModel";
 import GameModel from "./Games/GameModel";
+import WordsGameModel from "./Games/WordsGameModel";
 
 export class Storage {
 
@@ -44,6 +43,10 @@ export class Storage {
                 }
                 case GuessGameUid: {
                     this.gameModel = new GuessGameModel(uid, this.settings, this.guessTheWordService);
+                    break;
+                }
+                case WordsGameUid: {
+                    this.gameModel = new WordsGameModel(uid, this.settings, this.guessTheWordService);
                     break;
                 }
             }
@@ -122,39 +125,4 @@ export class SettingsModel implements Settings {
     culture: string = "ru-RU";
     lettersCount: number = 5;
     attempts: number = 6;
-}
-
-export class WordModel implements Word {
-    constructor() {
-        makeAutoObservable(this);
-    }
-
-    stringValue: string = "";
-    letters: Letter[] = [];
-
-    setStringValue(val: string) {
-        this.stringValue = val;
-        const chars = val.split('');
-        chars.map((c, index) => {
-            const letter = new LetterModel();
-            letter.letter = c;
-            letter.letterType = LetterType.None;
-            letter.position = index;
-            this.letters.push(letter);
-        })
-    }
-}
-
-export class LetterModel implements Letter {
-    constructor() {
-        makeAutoObservable(this);
-    }
-
-    letter = "";
-    letterType = LetterType.Default;
-    position = -1;
-
-    setLetterType(letType: LetterType): void {
-        this.letterType = letType;
-    }
 }

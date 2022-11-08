@@ -1,23 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GuessTheWord.Abstractions.Models;
 using GuessTheWord.Engine.Models;
-using GuessTheWord.TryGuessGame.Games;
 
-namespace GuessTheWord.TryGuessGame.Helpers
+namespace GuessTheWord.Engine.Helpers
 {
     /// <summary>
     /// Обработчик слова
     /// </summary>
-    internal static class WordParser
+    public static class WordParser
     {
         /// <summary>
         /// Обработать слово
         /// </summary>
         /// <param name="word">Слово</param>
+        /// <param name="size">Длина слова</param>
         /// <returns>Модель слова</returns>
-        internal static IEnumerable<ILetterModel> ParseWord(string word)
+        public static ILetterModel[] ParseWord(string word, int size)
         {
-            short letterPosition = 0;
+            var result = new ILetterModel[size];
+            int letterPosition = 0;
             word = word.ToLower();
             for (short i = 0; i < word.Length; i++)
             {
@@ -29,7 +31,7 @@ namespace GuessTheWord.TryGuessGame.Helpers
                         ++i;
                         var letterModel = new LetterModel(LetterOption.Fixed, letterPosition, word[i]);
                         ++letterPosition;
-                        yield return letterModel;
+                        result[i] = letterModel;
                         break;
                     }
                     case '$':
@@ -37,18 +39,25 @@ namespace GuessTheWord.TryGuessGame.Helpers
                         ++i;
                         var letterModel = new LetterModel(LetterOption.Any, letterPosition, word[i]);
                         ++letterPosition;
-                        yield return letterModel;
+                        result[i] = letterModel;
                         break;
                     }
                     default:
                     {
                         var letterModel = new LetterModel(LetterOption.None, letterPosition, word[i]);
                         ++letterPosition;
-                        yield return letterModel;
+                        result[i] = letterModel;
                         break;
                     }
                 }
             }
+
+            if (letterPosition != size)
+            {
+                throw new Exception("Размер слова не соответствует размеру правил");
+            }
+
+            return result;
         }
     }
 }
