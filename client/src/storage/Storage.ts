@@ -6,6 +6,9 @@ import GuessTheWordService from "../services/GuessTheWordService";
 import TryGuessGameModel from "./Games/TryGuessGameModel";
 import {GameInfoStorage} from "./GameInfoStorage";
 import {LangInfoStorage} from "./LangInfoStorage";
+import {GuessGameUid, TryGuessGameUid} from "./Constants";
+import GuessGameModel from "./Games/GuessGameModel";
+import GameModel from "./Games/GameModel";
 
 export class Storage {
 
@@ -26,7 +29,7 @@ export class Storage {
     currentGameInfo: GameInfo;
     currentLangInfo: LangInfo;
     settings: Settings;
-    gameModel?: TryGuessGameModel = undefined;
+    gameModel?: GameModel = undefined;
 
     setCurrentGame(gameInfo: GameInfo) {
         this.currentGameInfo = gameInfo;
@@ -34,7 +37,16 @@ export class Storage {
     async setGameModel(uid: string) {
         await this.guessTheWordService.setRules(uid, this.settings);
         runInAction(() => {
-            this.gameModel = new TryGuessGameModel(uid, this.settings, this.guessTheWordService);
+            switch (uid) {
+                case TryGuessGameUid: {
+                    this.gameModel = new TryGuessGameModel(uid, this.settings, this.guessTheWordService);
+                    break;
+                }
+                case GuessGameUid: {
+                    this.gameModel = new GuessGameModel(uid, this.settings, this.guessTheWordService);
+                    break;
+                }
+            }
         });
     }
     clear = async () => {

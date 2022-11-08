@@ -8,9 +8,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import Divider from "@mui/material/Divider";
-import WordAnswer from "./WordAnswer";
-import TryGuessGameModel from "../storage/Games/TryGuessGameModel";
-import {WordModel} from "../storage/Storage";
+import WordAnswer from "../../WordAnswer";
+import TryGuessGameModel from "../../../storage/Games/TryGuessGameModel";
+import {WordModel} from "../../../storage/Storage";
 
 export interface TryGuessGameContentProps {
     game?: TryGuessGameModel;

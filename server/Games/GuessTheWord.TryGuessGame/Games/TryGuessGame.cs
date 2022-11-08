@@ -39,10 +39,23 @@ namespace GuessTheWord.TryGuessGame.Games
         /// <inheritdoc />
         public IGameResult Play(string word)
         {
-            attempt += 1;
-            if (attempt > rule.Attempts)
+            var calcAttempts = true;
+            if (string.IsNullOrWhiteSpace(word))
             {
-                throw new Exception("Превышено количество попыток");
+                calcAttempts = false;
+                if (usedLetters.Count > 0 || processedLetterModels.Count > 0)
+                {
+                    calcAttempts = true;
+                }
+            }
+
+            if (calcAttempts)
+            {
+                attempt += 1;
+                if (attempt > rule.Attempts)
+                {
+                    throw new Exception("Превышено количество попыток");
+                }
             }
 
             if (wordSearcher == null)

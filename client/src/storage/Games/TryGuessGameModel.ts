@@ -1,22 +1,24 @@
 ﻿import {Word} from "../../interfaces/Word";
-import {LangInfo, LetterModel, SettingsModel, WordModel} from "../Storage";
-import {GuessGameUid, TryGuessGameUid, WordsGameUid} from "../Constants";
+import {SettingsModel, WordModel} from "../Storage";
 import GuessTheWordService from "../../services/GuessTheWordService";
-import {runInAction} from "mobx";
+import {action, makeObservable, observable, runInAction} from "mobx";
 import {SendWordResponse} from "../../interfaces/SendWordResponse";
 import {LetterType} from "../../interfaces/Letter";
+import GameModel from "./GameModel";
 
-export default class TryGuessGameModel {
+export default class TryGuessGameModel extends GameModel{
     constructor(uid: string, settings: SettingsModel, guessTheWordService: GuessTheWordService) {
-        this.uid = uid;
-        this.settings = settings;
-        this.guessTheWordService = guessTheWordService;
+        super(uid, settings, guessTheWordService);
+        makeObservable(this, {
+            wordModel: observable,
+            answers: observable,
+            AddWordModel: action,
+            AddWord: action,
+            SetAnswers: action,
+            Clear: action
+        });
     }
 
-    guessTheWordService: GuessTheWordService;
-
-    settings: SettingsModel;
-    uid: string;
     wordModel: Word[] = [];
     answers: string[] = [];
 
@@ -82,8 +84,5 @@ export default class TryGuessGameModel {
     }
     Clear() {
         this.wordModel = [];
-    }
-    SetUid(uid: string) {
-        this.uid = uid;
     }
 }

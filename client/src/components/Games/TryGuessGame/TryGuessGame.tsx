@@ -8,8 +8,9 @@ import Divider from "@mui/material/Divider";
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import FormHelperText from "@mui/material/FormHelperText";
-import {Storage, WordModel} from "../storage/Storage";
+import {Storage, WordModel} from "../../../storage/Storage";
 import TryGuessGameContent from "./TryGuessGameContent";
+import TryGuessGameModel from "../../../storage/Games/TryGuessGameModel";
 
 export interface TryGuessGameProps {
     storage: Storage;
@@ -22,7 +23,7 @@ function TryGuessGame(props: TryGuessGameProps) {
     const [disabled, setDisabled] = React.useState<boolean>(false);
     async function onAdd() {
         const settings = props.storage.settings;
-        const gameModel = props.storage.gameModel;
+        const gameModel = props.storage.gameModel as TryGuessGameModel;
         if (gameModel) {
             if (settings.attempts == gameModel.wordModel.length) {
                 return;
@@ -53,7 +54,7 @@ function TryGuessGame(props: TryGuessGameProps) {
     }
 
     async function onSelectWord(word: WordModel) {
-        const gameModel = props.storage.gameModel;
+        const gameModel = props.storage.gameModel as TryGuessGameModel;
         if (gameModel) {
             setDisabled(true);
             setLoading(true);
@@ -71,7 +72,7 @@ function TryGuessGame(props: TryGuessGameProps) {
                 Игра началась!
             </Typography>
             <Grid container>
-                {disabled === false || expertMode
+                {disabled === false
                     ?
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
@@ -101,7 +102,7 @@ function TryGuessGame(props: TryGuessGameProps) {
                     </Grid>
                     : <></>
                 }
-                <TryGuessGameContent game={props.storage.gameModel} loading={loading} onSelect={onSelectWord} />
+                <TryGuessGameContent game={props.storage.gameModel as TryGuessGameModel} loading={loading} onSelect={onSelectWord} />
             </Grid>
     </React.Fragment>)
 }

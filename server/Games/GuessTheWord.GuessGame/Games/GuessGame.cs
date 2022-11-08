@@ -31,6 +31,7 @@ namespace GuessTheWord.GuessGame.Games
             this.alphabet = alphabet;
         }
 
+        /// <inheritdoc />
         public IGameResult Play(string word)
         {
             throw new System.NotImplementedException();

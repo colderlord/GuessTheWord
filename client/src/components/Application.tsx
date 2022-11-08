@@ -5,10 +5,13 @@ import Typography from '@mui/material/Typography';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import {observer} from 'mobx-react';
-import {Storage} from "../storage/Storage";
 
+import {Storage} from "../storage/Storage";
+import {GuessGameUid, TryGuessGameUid, WordsGameUid} from "../storage/Constants";
 import Rules from "./Rules";
-import TryGuessGame from "./TryGuessGame";
+import TryGuessGame from "./Games/TryGuessGame/TryGuessGame";
+import GuessGame from "./Games/GuessGame/GuessGame";
+import WordsGame from "./Games/WordsGame/WordsGame";
 
 const steps = ['Правила', 'Игра'];
 
@@ -21,7 +24,21 @@ function getStepContent(step: number, storage: Storage) {
         case 0:
             return <Rules storage={storage}/>;
         case 1:
-            return <TryGuessGame storage={storage}/>;
+            const game = storage.gameModel;
+            if (game) {
+                switch (game.uid) {
+                    case TryGuessGameUid: {
+                        return <TryGuessGame storage={storage}/>;
+                    }
+                    case GuessGameUid: {
+                        return <GuessGame storage={storage}/>;
+                    }
+                    case WordsGameUid: {
+                        return <WordsGame storage={storage}/>;
+                    }
+                }
+            }
+            throw new Error('Unknown step');
         default:
             throw new Error('Unknown step');
     }

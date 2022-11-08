@@ -56,7 +56,7 @@ namespace GuessTheWord.TextFileDictionary.Providers
                 words = wordsByCulture[culture] = new Dictionary<int, List<string>>();
                 if (culture == "ru-RU")
                 {
-                    var stream = typeof(TextProvider).Assembly.GetManifestResourceStream("GuessTheWord.TextFileDictionary.Resources.russian_nouns.txt");
+                    var stream = typeof(TextProvider).Assembly.GetManifestResourceStream("GuessTheWord.TextFileDictionary.Resources.russian.txt");
                     var allWords = SplitToLines(stream);
                     foreach (var word in allWords)
                     {
