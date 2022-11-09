@@ -30,23 +30,23 @@ namespace GuessTheWord.Engine.Helpers
                     {
                         ++i;
                         var letterModel = new LetterModel(LetterOption.Fixed, letterPosition, word[i]);
+                        result[letterPosition] = letterModel;
                         ++letterPosition;
-                        result[i] = letterModel;
                         break;
                     }
                     case '$':
                     {
                         ++i;
                         var letterModel = new LetterModel(LetterOption.Any, letterPosition, word[i]);
+                        result[letterPosition] = letterModel;
                         ++letterPosition;
-                        result[i] = letterModel;
                         break;
                     }
                     default:
                     {
                         var letterModel = new LetterModel(LetterOption.None, letterPosition, word[i]);
+                        result[letterPosition] = letterModel;
                         ++letterPosition;
-                        result[i] = letterModel;
                         break;
                     }
                 }

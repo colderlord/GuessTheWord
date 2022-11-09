@@ -48,10 +48,6 @@ namespace GuessTheWord.TryGuessGame.Games
                     calcAttempts = true;
                 }
             }
-            else if (word.Length != rule.LettersCount)
-            {
-                return GameResult.Fail("Длина слова не соответствует длине по правилам");
-            }
 
             if (calcAttempts)
             {
@@ -69,10 +65,7 @@ namespace GuessTheWord.TryGuessGame.Games
             }
 
             var searchSettings = new SearchSettings(rule.Culture, alphabet);
-            if (!wordSearcher.IsWord(word, searchSettings))
-            {
-                return GameResult.Fail("Переданное значение не является словом");
-            }
+            
 
             ISearchWordModel searchWordModel;
             if (string.IsNullOrWhiteSpace(word))
@@ -83,6 +76,15 @@ namespace GuessTheWord.TryGuessGame.Games
             else
             {
                 var letterModels = WordParser.ParseWord(word, rule.LettersCount);
+                word = string.Concat(letterModels.Select(a => a.Value));
+                if (word.Length != rule.LettersCount)
+                {
+                    return GameResult.Fail("Длина слова не соответствует длине по правилам");
+                }
+                if (!wordSearcher.IsWord(word, searchSettings))
+                {
+                    return GameResult.Fail("Переданное значение не является словом");
+                }
                 foreach (var letterModel in letterModels)
                 {
                     usedLetters.Add(letterModel.Value);
