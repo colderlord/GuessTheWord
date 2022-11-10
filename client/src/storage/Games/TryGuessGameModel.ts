@@ -57,8 +57,12 @@ export default class TryGuessGameModel extends GameModel{
             // Отправить на сервер
             const res = await this.guessTheWordService.sendAnswer(this.uid, val) as SendWordResponse;
             runInAction(() => {
-                this.answers.splice(0);
-                this.answers.push(...res.result);
+                if (res.success === true) {
+                    this.answers.splice(0);
+                    this.answers.push(...res.result);
+                } else {
+                    this.setError(res.reason);
+                }
             });
         }
         catch (e) {
