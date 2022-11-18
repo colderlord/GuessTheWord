@@ -13,7 +13,7 @@ namespace GuessTheWord.TextFileDictionary.Providers
     internal sealed class TextProvider : IDictionaryProvider
     {
         private readonly string[] languages = {"ru-RU"};
-        private readonly Dictionary<string, Dictionary<int, List<string>>> wordsByCulture = new();
+        private readonly Dictionary<string, Dictionary<int, HashSet<string>>> wordsByCulture = new();
         
         /// <inheritdoc />
         public IEnumerable<string> Languages => languages;
@@ -49,11 +49,11 @@ namespace GuessTheWord.TextFileDictionary.Providers
             return words.Values.SelectMany(a => a).Contains(word);
         }
 
-        private Dictionary<int, List<string>> CheckAndInit(string culture)
+        private Dictionary<int, HashSet<string>> CheckAndInit(string culture)
         {
             if (!wordsByCulture.TryGetValue(culture, out var words))
             {
-                words = wordsByCulture[culture] = new Dictionary<int, List<string>>();
+                words = wordsByCulture[culture] = new Dictionary<int, HashSet<string>>();
                 if (culture == "ru-RU")
                 {
                     var stream = typeof(TextProvider).Assembly.GetManifestResourceStream("GuessTheWord.TextFileDictionary.Resources.russian_nouns.txt");
@@ -62,7 +62,7 @@ namespace GuessTheWord.TextFileDictionary.Providers
                     {
                         if (!words.TryGetValue(word.Length, out var lst))
                         {
-                            words[word.Length] = lst = new List<string>();
+                            words[word.Length] = lst = new HashSet<string>();
                         }
 
                         lst.Add(word.ToLower());
@@ -75,7 +75,7 @@ namespace GuessTheWord.TextFileDictionary.Providers
 
         private static IEnumerable<string> SplitToLines(Stream stream)
         {
-            var lines = new List<string>();
+            var lines = new HashSet<string>();
             using (var reader = new StreamReader(stream, Encoding.UTF8))
             {
                 string line;

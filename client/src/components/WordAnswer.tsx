@@ -39,17 +39,17 @@ function WordAnswer(props: WordAnswerProps) {
         switch (letter.letterType) {
             case LetterType.None:
             {
-                letter.letterType = LetterType.Any;
+                letter.setLetterType(LetterType.Any);
                 break;
             }
             case LetterType.Any:
             {
-                letter.letterType = LetterType.Fixed;
+                letter.setLetterType(LetterType.Fixed);
                 break;
             }
             case LetterType.Fixed:
             {
-                letter.letterType = LetterType.None;
+                letter.setLetterType(LetterType.None);
                 break;
             }
         }

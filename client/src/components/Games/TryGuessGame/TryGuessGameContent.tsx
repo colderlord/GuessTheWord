@@ -68,14 +68,14 @@ function TryGuessGameContent(props: TryGuessGameContentProps) {
             </Grid>
         </Grid>
         <Grid container>
-            <Grid item xs={12}>
+            <Grid key={"wordsContainerItem"} item xs={12}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         {
                             confirmedWords.reverse().map((w) => {
                                 return (
                                     <>
-                                        <WordAnswer word={w}/>
+                                        <WordAnswer key={w.stringValue} word={w}/>
                                         <Divider orientation="horizontal" />
                                     </>
                                 );
@@ -94,7 +94,7 @@ function TryGuessGameContent(props: TryGuessGameContentProps) {
                 <List dense>
                     {
                         props.game.answers.map((answer) => (
-                            <ListItemButton onClick={() => onWordClick(answer)}>
+                            <ListItemButton key={answer} onClick={() => onWordClick(answer)}>
                                 <ListItemText primary={answer}/>
                             </ListItemButton>
                         ))
