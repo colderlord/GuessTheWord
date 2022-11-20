@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  api:
+    image: ${REGISTRY}/server:${TAG:-latest}
+    restart: always
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 8000:80
+      - 8001:443
+    environment:
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=8001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${certPass}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/${certName}.pfx
+    volumes:
+      - ${USERPROFILE}\.aspnet/https:/https:ro
+  client:
+    image: ${REGISTRY}/client:${TAG:-latest}
+    restart: always
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    links:
+      - api
+    ports:
+      - 8002:3000
+  nginx:
+    depends_on:
+      - api
+      - client
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    links:
+      - api
+      - client
+    ports:
+      - 3050:80

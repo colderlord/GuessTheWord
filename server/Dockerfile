@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
 WORKDIR /home/app
 
 COPY Directory.Build.props .
@@ -19,6 +19,9 @@ COPY . .
 
 RUN dotnet publish -c Release ./GuessTheWord.sln -o /publish/
 
-WORKDIR /publish
 
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS final
+
+WORKDIR /publish
+COPY --from=build /publish .
 ENTRYPOINT ["dotnet", "GuessTheWord.Api.Web.dll"]
