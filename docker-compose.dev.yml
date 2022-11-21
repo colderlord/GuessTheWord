@@ -22,8 +22,10 @@ services:
     restart: always
     build:
       context: ./client
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     links:
       - api
+    volumes:
+      - ./client:/app/client
     ports:
       - 3000:80
