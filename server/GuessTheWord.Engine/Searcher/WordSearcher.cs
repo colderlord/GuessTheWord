@@ -46,6 +46,33 @@ namespace GuessTheWord.Engine.Searcher
             }
             else
             {
+                var checkedLetters = new List<ILetterModel>();
+                foreach (var letter in letters)
+                {
+                    checkedLetters.Add(letter);
+                    if (letter.Option == LetterOption.Any)
+                    {
+                        var noneLetter = checkedLetters.FirstOrDefault(a => a.Value == letter.Value && a.Option == LetterOption.None);
+                        if (noneLetter != null)
+                        {
+                            checkedLetters.Remove(noneLetter);
+                        }
+                        continue;
+                    }
+
+                    if (letter.Option == LetterOption.None)
+                    {
+                        var anyLetter = checkedLetters.FirstOrDefault(a => a.Value == letter.Value && a.Option == LetterOption.Any);
+                        if (anyLetter != null)
+                        {
+                            checkedLetters.Remove(letter);
+                        }
+                        continue;
+                    }
+                }
+
+                letters = checkedLetters.ToArray();
+
                 words = words
                     .Where(w => CheckWord(w, letters))
                     .ToList();
