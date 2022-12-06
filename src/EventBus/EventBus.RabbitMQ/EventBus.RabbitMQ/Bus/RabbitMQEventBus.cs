@@ -45,14 +45,14 @@ namespace EventBus.RabbitMQ.Bus
             IEventBusSubscriptionManager subscriptionsManager,
             IServiceProvider serviceProvider,
             ILogger<RabbitMQEventBus> logger,
-            string brokerName,
+            string exchangeName,
             string queueName)
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _subscriptionsManager = subscriptionsManager ?? throw new ArgumentNullException(nameof(subscriptionsManager));
             _serviceProvider = serviceProvider;
             _logger = logger;
-            _exchangeName = brokerName ?? throw new ArgumentNullException(nameof(brokerName));
+            _exchangeName = exchangeName ?? throw new ArgumentNullException(nameof(exchangeName));
             _queueName = queueName ?? throw new ArgumentNullException(nameof(queueName));
 
             ConfigureMessageBroker();

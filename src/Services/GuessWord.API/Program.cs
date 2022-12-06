@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using EventBus.Bus;
-using EventBus.RabbitMQ.Extensions;
 using GuessWord.Abstractions.Events;
+using GuessWord.API.DBContext;
 using GuessWord.API.IntegrationEvents.EventHandlers;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -25,9 +26,7 @@ namespace GuessWord.API
                 o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
             new ServiceConfigurator().ConfigureServices(builder.Services, builder.Configuration);
-            ConfigureEventBusDependencies(builder.Services, builder.Configuration);
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
@@ -46,21 +45,23 @@ namespace GuessWord.API
 
             ConfigureEventBusHandlers(app);
 
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
+                });
+            });
+
+            app.MigrateDbContext<GuessGameContext>((_, _) => { });
+
             return app.RunAsync();
-        }
-
-        private static void ConfigureEventBusDependencies(IServiceCollection services, ConfigurationManager configuration)
-        {
-            var rabbitMQSection = configuration.GetSection("RabbitMQ");
-            services.AddRabbitMQEventBus
-            (
-                connectionUrl: rabbitMQSection["ConnectionUrl"],
-                brokerName: "GuessWord.EventBusBroker",
-                queueName: "GuessWord.API.EventBusQueue",
-                timeoutBeforeReconnecting: 15
-            );
-
-            services.AddTransient<GetWordEventHandler>();
         }
 
         private static void ConfigureEventBusHandlers(IApplicationBuilder app)

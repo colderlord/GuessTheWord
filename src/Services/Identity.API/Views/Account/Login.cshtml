@@ -1,0 +1,21 @@
+﻿@model Identity.API.Model.AccountViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Log in";
+
+    var requestQuery = ViewContext.HttpContext.Request.Query;
+
+    requestQuery.TryGetValue("ReturnUrl", out var returnUrl);
+
+    string partialView;
+
+    Layout = "_Layout-SPA";
+    partialView = "_LoginPartial-SPA.cshtml";
+
+}
+
+<partial name=@partialView model=@Model />
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

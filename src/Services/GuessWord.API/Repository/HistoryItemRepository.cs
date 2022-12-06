@@ -1,4 +1,4 @@
-﻿using GuessWord.API.DBContexts;
+﻿using GuessWord.API.DBContext;
 using GuessWord.API.Model;
 using Microsoft.EntityFrameworkCore;
 

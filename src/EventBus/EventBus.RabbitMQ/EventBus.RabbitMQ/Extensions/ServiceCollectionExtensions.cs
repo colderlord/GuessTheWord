@@ -17,10 +17,10 @@ namespace EventBus.RabbitMQ.Extensions
         /// </summary>
         /// <param name="services">Service collection.</param>
         /// <param name="connectionUrl">URL to connect to RabbitMQ.</param>
-        /// <param name="brokerName">Broker name. This represents the exchange name.</param>
+        /// <param name="exchangeName">Broker name. This represents the exchange name.</param>
         /// <param name="queueName">Messa queue name, to track on RabbitMQ.</param>
         /// <param name="timeoutBeforeReconnecting">The amount of time in seconds the application will wait after trying to reconnect to RabbitMQ.</param>
-        public static void AddRabbitMQEventBus(this IServiceCollection services, string connectionUrl, string brokerName, string queueName, int timeoutBeforeReconnecting = 15)
+        public static void AddRabbitMQEventBus(this IServiceCollection services, string connectionUrl, string exchangeName, string queueName, int timeoutBeforeReconnecting = 15)
         {
             services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionManager>();
             services.AddSingleton<IPersistentConnection, RabbitMQPersistentConnection>(factory =>
@@ -41,7 +41,7 @@ namespace EventBus.RabbitMQ.Extensions
                 var subscriptionManager = factory.GetService<IEventBusSubscriptionManager>();
                 var logger = factory.GetService<ILogger<RabbitMQEventBus>>();
 
-                return new RabbitMQEventBus(persistentConnection, subscriptionManager, factory, logger, brokerName, queueName);
+                return new RabbitMQEventBus(persistentConnection, subscriptionManager, factory, logger, exchangeName, queueName);
             });
         }
     }
