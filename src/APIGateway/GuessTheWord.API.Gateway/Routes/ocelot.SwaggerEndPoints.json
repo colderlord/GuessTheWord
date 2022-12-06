@@ -1,0 +1,26 @@
+{
+  "SwaggerEndPoints": [
+    {
+      "Key": "tryguessword",
+      "TransformByOcelotConfig": true,
+      "Config": [
+        {
+          "Name": "TryGuessWord.API",
+          "Version": "1.0",
+          "Url": "http://localhost:5205/tryguessword/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "guessword",
+      "TransformByOcelotConfig": true,
+      "Config": [
+        {
+          "Name": "GuessWord.API",
+          "Version": "1.0",
+          "Url": "http://localhost:5205/guessword/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}

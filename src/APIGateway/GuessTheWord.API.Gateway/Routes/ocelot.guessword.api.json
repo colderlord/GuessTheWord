@@ -1,0 +1,22 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "SwaggerKey": "guessword",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": "7282"
+        }
+      ],
+      "UpstreamPathTemplate": "/guessword/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    }
+  ]
+}
