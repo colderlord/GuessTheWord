@@ -81,8 +81,8 @@ namespace GuessWord.Dictionary
             hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
             hcBuilder
                 .AddRabbitMQ(
-                    $"amqp://{rabbitMQSection["ConnectionUrl"]}",
-                    name: "payment-rabbitmqbus-check",
+                    rabbitMQSection["ConnectionUrl"],
+                    name: "guessworddictionary-rabbitmqbus-check",
                     tags: new string[] { "rabbitmqbus" });
 
             return services;

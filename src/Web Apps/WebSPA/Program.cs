@@ -46,7 +46,6 @@ namespace WebSPA
                 });
             });
 
-
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller}/{action=Index}/{id?}");
