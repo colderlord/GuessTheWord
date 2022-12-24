@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0
+ARG BUILD_CONFIGURATION=Debug
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+EXPOSE 80
+
+WORKDIR /src
+
+COPY ["BuildingBlocks/EventBus/EventBus/EventBus.csproj", "BuildingBlocks/EventBus/EventBus/"]
+COPY ["BuildingBlocks/EventBus/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj", "BuildingBlocks/EventBus/EventBus.RabbitMQ/"]
+COPY ["BuildingBlocks/EventBus/EventBus.Subscriptions.InMemory.csproj", "BuildingBlocks/EventBus/EventBus.Subscriptions.InMemory/"]
+COPY ["Services/TryGuessTheWord.API.Service/TryGuessTheWord.API/TryGuessTheWord.API.csproj", "Services/TryGuessTheWord.API.Service/TryGuessTheWord.API/"]
+COPY ["NuGet.config", "NuGet.config"]
+
+RUN dotnet restore Services/TryGuessTheWord.API.Service/TryGuessTheWord.API/TryGuessTheWord.API.csproj -nowarn:msb3202,nu1503
+COPY . .
+WORKDIR "/src/Services/TryGuessTheWord.API.Service/TryGuessTheWord.API"
+RUN dotnet build -c $BUILD_CONFIGURATION
+
+ENTRYPOINT ["dotnet", "run", "--no-build", "--no-launch-profile", "-c", "$BUILD_CONFIGURATION", "--"]

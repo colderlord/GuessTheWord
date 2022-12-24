@@ -1,0 +1,67 @@
+version: '3.4'
+
+services:
+
+  sqldata:
+    image: postgres:latest
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
+  identity-api:
+    image: ${REGISTRY:-gtword}/identity.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Identity.API.Service/Identity.API/Dockerfile
+    depends_on:
+      - sqldata
+  guessword-api:
+    image: ${REGISTRY:-gtword}/guessword-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/GuessWord.API.Service/GuessWord.API/Dockerfile
+    depends_on:
+      - sqldata
+      - rabbitmq
+  guessworddictionary-api:
+    image: ${REGISTRY:-gtword}/guessworddictionary-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/GuessWord.Dictionary.Service/GuessWord.Dictionary/Dockerfile
+    depends_on:
+      - sqldata
+      - rabbitmq
+  tryguessword-api:
+    image: ${REGISTRY:-gtword}/tryguessword-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/TryGuessTheWord.API.Service/TryGuessTheWord.API/Dockerfile
+    depends_on:
+      - sqldata
+  webagg:
+    image: ${REGISTRY:-gtword}/webagg:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: APIGateway/GuessTheWord.API.Gateway/aggregator/Dockerfile
+    depends_on:
+      - sqldata
+      - identity-api
+      - rabbitmq
+      - guessword-api
+      - tryguessword-api
+      - guessworddictionary-api
+  webstatus:
+    image: ${REGISTRY:-gtword}/webstatus:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Web/WebStatus/Dockerfile
+  webspa:
+    image: ${REGISTRY:-gtword}/webspa:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Web/WebSPA/Dockerfile
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:current-alpine3.17}
+        progress: plain
+    depends_on:
+      - webagg

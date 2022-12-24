@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0
+ARG BUILD_CONFIGURATION=Debug
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+EXPOSE 80
+
+WORKDIR /src
+COPY ["src/APIGateway/GuessTheWord.API.Gateway/aggregator/GuessTheWord.API.Gateway.csproj", "src/APIGateway/GuessTheWord.API.Gateway/aggregator/"]
+COPY ["src/NuGet.config", "src/NuGet.config"]
+
+RUN dotnet restore src/APIGateway/GuessTheWord.API.Gateway/aggregator/GuessTheWord.API.Gateway.csproj -nowarn:msb3202,nu1503
+COPY . .
+WORKDIR "/src/src/APIGateway/GuessTheWord.API.Gateway/aggregator"
+RUN dotnet build -c $BUILD_CONFIGURATION
+
+CMD ["dotnet", "run", "--no-build", "--no-launch-profile", "-c", "$BUILD_CONFIGURATION", "--"]]
