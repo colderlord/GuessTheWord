@@ -16,6 +16,7 @@ COPY "Services/GuessWord.API.Service/GuessWord.API/GuessWord.API.csproj" "Servic
 COPY "Services/GuessWord.Dictionary.Service/GuessWord.Dictionary/GuessWord.Dictionary.csproj" "Services/GuessWord.Dictionary.Service/GuessWord.Dictionary/GuessWord.Dictionary.csproj"
 COPY "Services/Identity.API.Service/Identity.API/Identity.API.csproj" "Services/Identity.API.Service/Identity.API/Identity.API.csproj"
 COPY "Services/TryGuessTheWord.API.Service/TryGuessTheWord.API/TryGuessTheWord.API.csproj" "Services/TryGuessTheWord.API.Service/TryGuessTheWord.API/TryGuessTheWord.API.csproj"
+COPY "Stuff/Extensions/AspNetCore.HealthChecks.PostgreSQL/AspNetCore.HealthChecks.PostgreSQL.csproj" "Stuff/Extensions/AspNetCore.HealthChecks.PostgreSQL/AspNetCore.HealthChecks.PostgreSQL.csproj"
 COPY "Web/WebSPA/WebSPA.csproj" "Web/WebSPA/WebSPA.csproj"
 COPY "Web/WebStatus/WebStatus.csproj" "Web/WebStatus/WebStatus.csproj"
 

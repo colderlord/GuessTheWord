@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
+      <ProjectReference Include="..\..\..\Stuff\Extensions\AspNetCore.HealthChecks.PostgreSQL\AspNetCore.HealthChecks.PostgreSQL.csproj" />
     </ItemGroup>
 
 </Project>

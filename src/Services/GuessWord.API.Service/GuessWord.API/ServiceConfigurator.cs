@@ -51,16 +51,21 @@ namespace GuessWord.API
             hcBuilder
                 .AddRabbitMQ(
                     $"amqp://{configuration["EventBusConnection"]}",
-                    name: "guesswordd-rabbitmqbus-check",
+                    name: "guessword-rabbitmqbus-check",
                     tags: new string[] { "rabbitmqbus" });
+
+            hcBuilder
+                .AddPostgreSqlCheck(
+                    configuration["PGConnectionString"],
+                    name: "guessword-postgresql-check",
+                    tags: new string[] { "postgresql" }
+                );
 
             return services;
         }
 
         public static IServiceCollection ConfigureEventBusDependencies(this IServiceCollection services, ConfigurationManager configuration)
         {
-            Console.WriteLine(
-                $"amqp://{configuration["EventBusUserName"]}:{configuration["EventBusPassword"]}@{configuration["EventBusConnection"]}");
             services.AddRabbitMQEventBus
             (
                 connectionUrl: $"amqp://{configuration["EventBusUserName"]}:{configuration["EventBusPassword"]}@{configuration["EventBusConnection"]}",

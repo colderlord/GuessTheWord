@@ -33,7 +33,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - IdentityUrl=http://${GTWORD_EXTERNAL_DNS_NAME_OR_IP}:5017
-      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - PGConnectionString=${GTWORD_GUESSWORD_DBHost:-Host=sqldata;Port=5432;Database=GuessGame.Services.GuessGameDb;User Id=postgres;Password=MasterKey1;}
+      - EventBusConnection=${GTWORD_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${GTWORD_SERVICE_BUS_USERNAME}
       - EventBusPassword=${GTWORD_SERVICE_BUS_PASSWORD}
       - UseCustomizationData=True
@@ -48,7 +49,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - EventBusConnection=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - EventBusConnection=${GTWORD_SERVICE_BUS:-rabbitmq}
       - EventBusUserName=${GTWORD_SERVICE_BUS_USERNAME}
       - EventBusPassword=${GTWORD_SERVICE_BUS_PASSWORD}
       - UseCustomizationData=True
