@@ -2,12 +2,12 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "SwaggerKey": "dictionary",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": "7018"
+          "Host": "guessworddictionary-api",
+          "Port": "80"
         }
       ],
       "UpstreamPathTemplate": "/dictionary/{everything}",

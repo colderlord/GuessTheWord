@@ -37,6 +37,19 @@ namespace GuessWord.API.Services
         }
 
         /// <inheritdoc />
+        public GuessGame Load(long id)
+        {
+            var game = guessGameRepository.Load(id);
+            return game;
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<GuessGame> List()
+        {
+            return guessGameRepository.Find();
+        }
+
+        /// <inheritdoc />
         public DateTime Start(long id)
         {
             using var scope = new TransactionScope();

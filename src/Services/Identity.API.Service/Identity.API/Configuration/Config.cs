@@ -48,9 +48,7 @@ namespace Identity.API.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "guessword",
-                        "webagg",
-                        "orders.signalrhub",
-                        "webhooks"
+                        "webagg"
                     }
                 },
                 new()

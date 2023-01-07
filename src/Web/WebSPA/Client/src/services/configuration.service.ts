@@ -9,7 +9,8 @@ export class ConfigurationService {
     constructor(private storageService: StorageService) { 
         makeAutoObservable(this);
         this.serverSettings = {
-            identityUrl: ""
+            identityUrl: "",
+            webAggregatorUrl: ""
         };
     }
     
@@ -20,10 +21,9 @@ export class ConfigurationService {
             response.json()
                 .then(res => {
                     runInAction(() => {
-                        console.log('server settings loaded');
                         this.serverSettings = res as IConfiguration;
-                        console.log(this.serverSettings);
                         this.storageService.store('identityUrl', this.serverSettings.identityUrl);
+                        this.storageService.store('webAggregatorUrl', this.serverSettings.webAggregatorUrl);
                         this.isReady = true;
                     });
                 })

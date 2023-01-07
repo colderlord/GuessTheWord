@@ -57,7 +57,7 @@ export class SecurityService {
         let client_id = 'js';
         let redirect_uri = window.location.origin + '/';
         let response_type = 'id_token token';
-        let scope = 'openid profile orders basket webagg orders.signalrhub';
+        let scope = 'openid profile webagg';
         let nonce = 'N' + Math.random() + '' + Date.now();
         let state = Date.now() + '' + Math.random();
 

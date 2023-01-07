@@ -78,7 +78,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - GuessWordDictionaryUrlHC=http://guessworddictionary-api/hc
       - GuessWordUrlHC=http://guessword-api/hc
-      - TryGuessWordUrlHC=http://guessword-api/hc
+      - TryGuessWordUrlHC=http://tryguessword-api/hc
       - IdentityUrlHC=http://identity-api/hc
       - IdentityUrlExternal=http://${GTWORD_EXTERNAL_DNS_NAME_OR_IP}:5105
     ports:
@@ -111,6 +111,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - IdentityUrl=http://${GTWORD_EXTERNAL_DNS_NAME_OR_IP}:5017
       - IdentityUrlHC=http://identity-api/hc
+      - WebAggregatorUrl=http://${GTWORD_EXTERNAL_DNS_NAME_OR_IP}:5205
+      - WebAggregatorUrlHC=http://webagg/hc
       - UseCustomizationData=True
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}

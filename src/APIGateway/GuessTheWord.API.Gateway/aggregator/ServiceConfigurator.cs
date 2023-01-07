@@ -20,6 +20,18 @@ namespace GuessTheWord.API.Gateway
         public void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
         {
             services.AddCustomHealthCheck(configuration);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                        .SetIsOriginAllowed((host) => true)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
+            services.AddOptions();
         }
     }
 

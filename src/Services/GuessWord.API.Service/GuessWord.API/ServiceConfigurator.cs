@@ -30,7 +30,7 @@ namespace GuessWord.API
 
             services.ConfigureEventBusDependencies(configuration);
 
-            services.AddDbContext<GuessGameContext>(o => o.UseNpgsql(configuration.GetConnectionString("GuessGameDb")));
+            services.AddDbContext<GuessGameContext>(o => o.UseNpgsql(configuration["PGConnectionString"]));
 
             services.AddTransient<IGuessGameRepository, GuessGameRepository>();
             services.AddTransient<ISettingsRepository, SettingsRepository>();

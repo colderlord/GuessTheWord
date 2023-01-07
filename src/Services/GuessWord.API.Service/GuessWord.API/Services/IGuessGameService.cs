@@ -7,6 +7,10 @@ namespace GuessWord.API.Services
     {
         GuessGame Create(Settings settings);
 
+        GuessGame Load(long id);
+
+        IEnumerable<GuessGame> List();
+
         DateTime Start(long id);
 
         void Game(long id, string word);

@@ -2,12 +2,12 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "SwaggerKey": "tryguessword",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": "7003"
+          "Host": "tryguessword-api",
+          "Port": "80"
         }
       ],
       "UpstreamPathTemplate": "/tryguessword/{everything}",

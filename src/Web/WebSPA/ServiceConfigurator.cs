@@ -31,7 +31,10 @@ namespace WebSPA
             var hcBuilder = services.AddHealthChecks();
 
             hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy())
-                .AddUrlGroup(new Uri(configuration["IdentityUrlHC"]), name: "identity-check", tags: new string[] { "identityapi" });
+                .AddUrlGroup(new Uri(configuration["IdentityUrlHC"]), name: "identity-check",
+                    tags: new string[] { "identityapi" })
+                .AddUrlGroup(new Uri(configuration["WebAggregatorUrlHC"]), name: "webaggregator-check",
+                    tags: new string[] { "webaggregator" });
 
             return services;
         }

@@ -2,12 +2,12 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "SwaggerKey": "guessword",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": "7282"
+          "Host": "guessword-api",
+          "Port": "80"
         }
       ],
       "UpstreamPathTemplate": "/guessword/{everything}",

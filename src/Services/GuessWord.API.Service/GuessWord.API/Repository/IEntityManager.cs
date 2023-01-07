@@ -27,5 +27,7 @@ namespace GuessWord.API.Repository
         /// </summary>
         /// <param name="entity">Объект</param>
         void Save(TEntity historyItem);
+
+        IEnumerable<TEntity> Find();
     }
 }

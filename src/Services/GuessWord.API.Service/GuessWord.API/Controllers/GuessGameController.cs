@@ -1,5 +1,4 @@
 ﻿using EventBus.Bus;
-using GuessWord.Abstractions.Events;
 using GuessWord.API.Model;
 using GuessWord.API.Services;
 using GuessWord.API.ViewModel;
@@ -23,8 +22,8 @@ namespace GuessWord.API.Controllers
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(long id)
         {
-            //var game = guessGameRepository.LoadOrNull(id);
-            return new OkObjectResult(null);
+            var game = guessGameService.Load(id);
+            return new OkObjectResult(game);
         }
 
         [HttpPost("CreateGame")]
@@ -61,11 +60,11 @@ namespace GuessWord.API.Controllers
             return new OkObjectResult(endedDate);
         }
 
-        [HttpGet("SendMessage")]
-        public IActionResult SendMessage(string message)
+        [HttpGet("List")]
+        public IActionResult List(int page, int size)
         {
-            eventBus.Publish(new GetWordEvent{ Message = message});
-            return new OkObjectResult("Сообщение отправлено");
+            var games = guessGameService.List();
+            return new OkObjectResult(games);
         }
     }
 }

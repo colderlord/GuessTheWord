@@ -64,6 +64,8 @@ namespace GuessTheWord.API.Gateway
 
             app.UseAuthorization();
 
+            app.UseCors("CorsPolicy");
+
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {

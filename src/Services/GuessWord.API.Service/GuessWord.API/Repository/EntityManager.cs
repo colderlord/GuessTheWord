@@ -1,5 +1,4 @@
-﻿using System;
-using GuessWord.API.Model;
+﻿using GuessWord.API.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace GuessWord.API.Repository
@@ -64,6 +63,12 @@ namespace GuessWord.API.Repository
             Save();
         }
 
+        /// <inheritdoc />
+        public IEnumerable<TEntity> Find()
+        {
+            return Table.ToList();
+        }
+
         /// <summary>
         /// Таблица
         /// </summary>
@@ -81,11 +86,6 @@ namespace GuessWord.API.Repository
         // {
         //     dbContext.Entry(product).State = EntityState.Modified;
         //     Save();
-        // }
-
-        // public IEnumerable<Product> GetProducts()
-        // {
-        //     return dbContext.Products.ToList();
         // }
 
         // public void DeleteProduct(int id)

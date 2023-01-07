@@ -1,21 +1,13 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using HealthChecks.UI.Client;
 using Identity.API.DbContext;
 using Identity.API.Model;
 using Identity.API.Services;
 using IdentityServer4.Services;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Microsoft.eShopOnContainers.Services.Identity.API
 {
@@ -31,7 +23,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("IdentityDb");
+            var connectionString = Configuration.GetConnectionString("PGConnectionString");
 
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -48,7 +40,12 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API
                 .AddDefaultTokenProviders();
 
             services.AddHealthChecks()
-                .AddCheck("self", () => HealthCheckResult.Healthy());
+                .AddCheck("self", () => HealthCheckResult.Healthy())
+                .AddPostgreSqlCheck(
+                    Configuration["PGConnectionString"],
+                    name: "identity-postgresql-check",
+                    tags: new string[] { "postgresql" }
+                );
 
             services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();
             services.AddTransient<IRedirectService, RedirectService>();
@@ -66,7 +63,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API
             .AddConfigurationStore(options =>
             {
                 options.ConfigureDbContext = builder => builder.UseNpgsql(connectionString,
-                    npgsqlOptionsAction: sqlOptions =>
+                    sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(migrationsAssembly);
                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
@@ -76,7 +73,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API
             .AddOperationalStore(options =>
             {
                 options.ConfigureDbContext = builder => builder.UseNpgsql(connectionString,
-                    npgsqlOptionsAction: sqlOptions =>
+                    sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(migrationsAssembly);
                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 

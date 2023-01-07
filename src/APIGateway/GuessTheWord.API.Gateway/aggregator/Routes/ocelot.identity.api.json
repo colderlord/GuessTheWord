@@ -2,12 +2,12 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "SwaggerKey": "identity",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": "7017"
+          "Host": "identity-api",
+          "Port": "80"
         }
       ],
       "UpstreamPathTemplate": "/identity/{everything}",
