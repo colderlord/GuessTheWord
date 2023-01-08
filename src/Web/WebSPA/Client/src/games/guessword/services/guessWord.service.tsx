@@ -5,14 +5,16 @@ import {StorageService} from "../../../services/storage.service";
 import {IGameInfo} from "../../../models/gameInfo.model";
 import GuessWordGameIndex from "../components/guessWordGameIndex";
 import RouteModel from "../../../models/route";
-import {GuessWordGame} from "../components/guessWordGame";
+import GuessWordGame from "../components/guessWordGame";
 import {IRoutingService} from "../../../services/routing.service";
 import {IGameInfoService} from "../../../services/gameInfo.service";
 import {IGameService} from "../../../services/game.service";
-import {Guessgameitem} from "../models/guessgameitem";
+import {GuessGame} from "../models/guessGame";
+import {GuessGameSettings} from "../models/guessGameSettings";
 
 export class GuessWordService implements IRoutingService, IGameInfoService, IGameService {
     private serviceKey = "GuessWordUrl";
+    private guessGameApi = '/api/GuessGame';
     private storage: StorageService;
     private guessWordUrl = '';
     private readonly gameInfo: IGameInfo;
@@ -76,33 +78,49 @@ export class GuessWordService implements IRoutingService, IGameInfoService, IGam
         ]
     }
 
-    list(page: number, size: number) : Promise<Guessgameitem[]> {
+    async list(page: number, size: number): Promise<GuessGame[]> {
         if (this.guessWordUrl === '') {
             this.guessWordUrl = this.storage.retrieve(this.serviceKey);
         }
-        const url = this.guessWordUrl + '/api/GuessGame/List?page='+page + "&size=" + size;
-        return fetch(url).then((response) => {
-            return response.json()
-                .then(res => {
-                    console.log(res);
-                    return res as Guessgameitem[];
-                });
-        });
+        const url = this.guessWordUrl + this.guessGameApi + '/List?page=' + page + "&size=" + size;
+        let response = await fetch(url);
+        let res = await response.json();
+        return res as GuessGame[];
     }
 
-    load(id: string) {
+    async load(id: string): Promise<GuessGame> {
         if (this.guessWordUrl === '') {
             this.guessWordUrl = this.storage.retrieve(this.serviceKey);
         }
-        const url = this.guessWordUrl + '/api/GuessGame/' + id;
-        fetch(url).then((response) => {
-            response.json()
-                .then(res => {
-                    console.log(res);
-                    runInAction(() => {
-                        
-                    });
-                });
+        const url = this.guessWordUrl + this.guessGameApi + id;
+        let response = await fetch(url);
+        let res = await response.json();
+        return res as GuessGame;
+    }
+
+    async createGame(settings: GuessGameSettings): Promise<GuessGame> {
+        if (this.guessWordUrl === '') {
+            this.guessWordUrl = this.storage.retrieve(this.serviceKey);
+        }
+        const url = this.guessWordUrl + this.guessGameApi + '/CreateGame';
+        let response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(settings)
         });
+        let res = await response.json();
+        return res as GuessGame;
+    }
+
+    async startGame(id: string): Promise<Date> {
+        if (this.guessWordUrl === '') {
+            this.guessWordUrl = this.storage.retrieve(this.serviceKey);
+        }
+        const url = this.guessWordUrl + this.guessGameApi + '/StartGame?id='+id;
+        let response = await fetch(url);
+        let res = await response.json();
+        return res;
     }
 }

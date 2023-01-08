@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import {Box, Link, Toolbar} from "@mui/material";
+import {useHistory} from 'react-router-dom'
+import {Box, Button, Dialog, Link, Toolbar} from "@mui/material";
 import {observer} from "mobx-react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,16 +10,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {guessWordService} from "../../../App";
-import {Guessgameitem} from "../models/guessgameitem";
+import {GuessGame} from "../models/guessGame";
 import {NavLink} from "react-router-dom";
-import {FetchDataProps} from "../../../components/FetchData";
+import CreateGuessWordGame from "./createGuessWordGame";
 
 export interface GuessWordGameIndexProps {
-    
+    history: typeof useHistory
 }
 
 export interface GuessWordGameIndexState {
-    items: Guessgameitem[];
+    items: GuessGame[];
     loading: boolean;
 }
 
@@ -37,12 +38,22 @@ class GuessWordGameIndex extends Component<GuessWordGameIndexProps, GuessWordGam
                     }
                 )
             })
-        
+    }
+
+    onGameCreated(game: GuessGame) {
+        // this.setState(
+        //     {
+        //         items: this.state.items
+        //     }
+        // )
+        // this.state.items.push(game);
+        this.props.history().push("/guessGame/"+game.id);
     }
 
     render() {
         return <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <Toolbar />
+            <CreateGuessWordGame onGameCreated={this.onGameCreated} />
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="table">
                     <TableHead>
