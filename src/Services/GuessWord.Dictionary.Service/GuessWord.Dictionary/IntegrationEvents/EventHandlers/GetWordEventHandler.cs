@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using EventBus.Bus;
+﻿using EventBus.Bus;
 using EventBus.Events;
 using GuessWord.Abstractions.Events;
-using Microsoft.Extensions.Logging;
 
 namespace GuessWord.Dictionary.IntegrationEvents.EventHandlers
 {

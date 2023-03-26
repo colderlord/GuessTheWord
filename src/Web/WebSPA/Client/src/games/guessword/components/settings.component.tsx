@@ -17,9 +17,9 @@ class SettingsComponent extends Component<SettingsComponentProps, SettingsCompon
     constructor(props: SettingsComponentProps) {
         super(props);
         this.state = {
-            attemts: this.props.settings.Attemts,
-            wordLength: this.props.settings.WordLength,
-            lang: this.props.settings.Language
+            attemts: this.props.settings.attempts,
+            wordLength: this.props.settings.wordLength,
+            lang: this.props.settings.language
         }
     }
 
@@ -72,7 +72,7 @@ class SettingsComponent extends Component<SettingsComponentProps, SettingsCompon
                 variant="standard"
                 value={this.state.attemts}
                 onChange={e => this.setState({attemts: Number(e.target.value)})}
-                onBlur={e => this.props.settings.setAttemts(this.state.attemts)}
+                onBlur={e => this.props.settings.setAttempts(this.state.attemts)}
             />
             <TextField
                 inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}

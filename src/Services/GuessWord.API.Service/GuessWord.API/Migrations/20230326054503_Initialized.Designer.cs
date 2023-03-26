@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GuessWord.API.Migrations
 {
     [DbContext(typeof(GuessGameContext))]
-    [Migration("20221126051529_Initialized")]
+    [Migration("20230326054503_Initialized")]
     partial class Initialized
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace GuessWord.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)

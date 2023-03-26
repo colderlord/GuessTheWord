@@ -3,24 +3,32 @@ import {makeAutoObservable} from "mobx";
 export class GuessGameSettings {
     constructor() {
         makeAutoObservable(this);
-        this.Attemts = 6;
-        this.WordLength = 5;
-        this.Language = "ru-RU";
+        this.attempts = 6;
+        this.wordLength = 5;
+        this.language = "ru-RU";
     }
 
-    public Attemts: number;
-    public WordLength: number;
-    public Language: string;
+    public attempts: number;
+    public wordLength: number;
+    public language: string;
 
-    setAttemts(attemts: number) : void {
-        this.Attemts = attemts;
+    setAttempts(attempts: number) : void {
+        this.attempts = attempts;
     }
 
     setWordLength(wordLength: number) : void {
-        this.WordLength = wordLength;
+        this.wordLength = wordLength;
     }
 
     setLanguage(lang: string) : void {
-        this.Language = lang;
+        this.language = lang;
+    }
+
+    static fromJson(json: any): GuessGameSettings {
+        const settings = new GuessGameSettings();
+        settings.wordLength = json.wordLength;
+        settings.attempts = json.attempts;
+        settings.language = json.language;
+        return settings;
     }
 }

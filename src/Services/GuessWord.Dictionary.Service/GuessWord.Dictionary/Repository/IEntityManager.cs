@@ -1,6 +1,6 @@
-﻿using GuessWord.API.Model;
+﻿using GuessWord.Dictionary.Model;
 
-namespace GuessWord.API.Repository
+namespace GuessWord.Dictionary.Repository
 {
     /// <summary>
     /// Базовый интерфейс репозитория

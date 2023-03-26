@@ -2,10 +2,9 @@ import React, {Component} from "react";
 import {RouteComponentProps} from "react-router-dom";
 import {observer} from "mobx-react";
 import {Start} from "@mui/icons-material";
-import {Box, Button, Toolbar} from "@mui/material";
+import {Box, Button, Skeleton, Toolbar} from "@mui/material";
 import {guessWordService} from "../../../App";
 import {GuessGame} from "../models/guessGame";
-import {GuessGameSettings} from "../models/guessGameSettings";
 import GuessWordGameField from "./guessWordGameField";
 
 interface RouteParams {
@@ -13,7 +12,7 @@ interface RouteParams {
 }
 
 export interface GuessWordGameState {
-    game: GuessGame,
+    game?: GuessGame,
     loading: boolean
 }
 
@@ -21,7 +20,6 @@ class GuessWordGame extends Component<RouteComponentProps<RouteParams>, GuessWor
     constructor(props: RouteComponentProps<RouteParams>) {
         super(props);
         this.state = {
-            game: new GuessGame(new GuessGameSettings()),
             loading: true
         }
     }
@@ -40,19 +38,17 @@ class GuessWordGame extends Component<RouteComponentProps<RouteParams>, GuessWor
             loading: true
         })
 
-        const startDate = await guessWordService.startGame(this.state.game.id);
-        this.state.game.setStartDate(startDate);
+        const startDate = await guessWordService.startGame(this.state.game!);
 
         this.setState({
             loading: false
         });
     }
 
-    render() {
-        return <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-            <Toolbar />
-            <h1>Игра GuessGame от = {this.state.game.creationDate.toString()}!</h1>
-            {!this.state.game.startDate
+    renderGame(game: GuessGame) {
+        return <>
+            <h1>Игра GuessGame от = {game.creationDate.toString()}!</h1>
+            {!game.startDate
                 ?
                 <Button
                     startIcon={<Start/>}
@@ -62,7 +58,31 @@ class GuessWordGame extends Component<RouteComponentProps<RouteParams>, GuessWor
                 </Button>
                 : <></>
             }
-            <GuessWordGameField game={this.state.game} />
+            <GuessWordGameField game={game} />
+        </>
+    }
+
+    render() {
+        const {game, loading} = this.state;
+        if (loading) {
+            return <></>
+        }
+        if (!game) {
+            if (loading)
+            return <></>
+        }
+
+        return <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <Toolbar />
+            {loading
+                ? <>
+                    <Skeleton/>
+                    <Skeleton/>
+                    <Skeleton/>
+                </>
+                : <></>
+            }
+            {game ? this.renderGame(game) : <></>}
         </Box>;
     }
 }

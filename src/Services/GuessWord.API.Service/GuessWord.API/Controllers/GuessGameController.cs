@@ -32,7 +32,7 @@ namespace GuessWord.API.Controllers
             var settings = new Settings
             {
                 Attempts = gameSettings.Attempts,
-                WordLength = gameSettings.LettersCount,
+                WordLength = gameSettings.WordLength,
                 Language = gameSettings.Language
             };
             var game = guessGameService.Create(settings);

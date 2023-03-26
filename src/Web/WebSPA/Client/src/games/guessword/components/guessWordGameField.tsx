@@ -1,7 +1,10 @@
 import {observer} from "mobx-react";
 import React, {Component} from "react";
-import {Box, Paper, TextField} from "@mui/material";
+import {Box, Paper} from "@mui/material";
 import {GuessGame} from "../models/guessGame";
+import WordItem from "./wordItem";
+import WordAnswer from "./wordAnswer";
+import {WordModel} from "../../../models/word.interface";
 
 export interface GuessWordGameFieldProps {
     game: GuessGame
@@ -11,34 +14,15 @@ export interface GuessWordGameFieldState {
 }
 
 class GuessWordGameField extends Component<GuessWordGameFieldProps, GuessWordGameFieldState> {
-    renderRow(): React.ReactElement {
-        let letters = [];
-        for (let i = 0; i < this.props.game.settings.WordLength; i++) {
-            letters.push(
-                <TextField
-                    key={i.toString()}
-                    size="small"
-                    InputProps={{
-                        style: { width: `40px` },
-                    }}
-                />
-            )
-        }
-        return (
-            <Paper
-                component="form"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-            >
-                {letters}
-            </Paper>
-        );
-    }
-
     render() {
+        const { game } = this.props;
+        const settings = game.settings;
         let rows = [];
-        for (let i = 0; i < this.props.game.settings.Attemts; i++) {
+        for (let i = 0; i < settings.attempts; i++) {
+            const historyItem = game.history[i];
             rows.push(
-                this.renderRow()
+                <WordAnswer word={new WordModel()} editable={false} />
+                // <WordItem wordLength={settings.wordLength} disabled={false} />
             )
         }
 
@@ -51,7 +35,9 @@ class GuessWordGameField extends Component<GuessWordGameFieldProps, GuessWordGam
                 noValidate
                 autoComplete="off"
             >
-                {rows}
+                <Paper>
+                    {rows}
+                </Paper>
             </Box>);
     }
 }

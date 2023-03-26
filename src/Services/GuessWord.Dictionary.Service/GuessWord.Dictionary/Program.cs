@@ -1,10 +1,11 @@
+using System.Text.Json.Serialization;
 using EventBus.Bus;
-using EventBus.RabbitMQ.Extensions;
 using GuessWord.Abstractions.Events;
+using GuessWord.API;
+using GuessWord.Dictionary.DBContext;
 using GuessWord.Dictionary.IntegrationEvents.EventHandlers;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace GuessWord.Dictionary
 {
@@ -16,14 +17,14 @@ namespace GuessWord.Dictionary
         public static Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            
+            builder.Services.AddControllers().AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            });
+            new ServiceConfigurator().ConfigureServices(builder.Services, builder.Configuration);
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddCustomHealthCheck(builder.Configuration);
-            builder.Services.ConfigureEventBusDependencies(builder.Configuration);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -34,7 +35,9 @@ namespace GuessWord.Dictionary
             }
 
             app.UseHttpsRedirection();
+
             app.UseAuthorization();
+
             app.MapControllers();
 
             ConfigureEventBusHandlers(app);
@@ -53,6 +56,8 @@ namespace GuessWord.Dictionary
                 });
             });
 
+            app.MigrateDbContext<DictionaryContext>((_, _) => { });
+
             return app.RunAsync();
         }
 
@@ -62,38 +67,6 @@ namespace GuessWord.Dictionary
 
             // Here you add the event handlers for each intergration event.
             eventBus.Subscribe<GetWordEvent, GetWordEventHandler>();
-        }
-    }
-
-    internal static class CustomExtensionMethods
-    {
-        public static IServiceCollection AddCustomHealthCheck(this IServiceCollection services, IConfiguration configuration)
-        {
-            var hcBuilder = services.AddHealthChecks();
-
-            hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
-            hcBuilder
-                .AddRabbitMQ(
-                    $"amqp://{configuration["EventBusConnection"]}",
-                    name: "guessworddictionary-rabbitmqbus-check",
-                    tags: new string[] { "rabbitmqbus" });
-
-            return services;
-        }
-
-        public static IServiceCollection ConfigureEventBusDependencies(this IServiceCollection services, ConfigurationManager configuration)
-        {
-            services.AddRabbitMQEventBus
-            (
-                connectionUrl: $"amqp://{configuration["EventBusUserName"]}:{configuration["EventBusPassword"]}@{configuration["EventBusConnection"]}",
-                exchangeName: "GuessWord.EventBusBroker",
-                queueName: "GuessWord.Dictionary.EventBusQueue",
-                timeoutBeforeReconnecting: 15
-            );
-
-            services.AddTransient<GetWordEventHandler>();
-
-            return services;
         }
     }
 }
