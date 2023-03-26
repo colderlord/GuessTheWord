@@ -1,6 +1,11 @@
-﻿namespace GuessWord.Dictionary.Services;
+﻿using GuessWord.Dictionary.Services.Model;
 
-public class WordService : IWordService
+namespace GuessWord.Dictionary.Services;
+
+internal class WordService : IWordService
 {
-    
+    public IEnumerable<string> GetWords(ISearchOptions options)
+    {
+        throw new NotImplementedException();
+    }
 }

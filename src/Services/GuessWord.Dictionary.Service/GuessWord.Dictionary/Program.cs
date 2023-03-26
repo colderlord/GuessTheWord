@@ -3,6 +3,7 @@ using EventBus.Bus;
 using GuessWord.Abstractions.Events;
 using GuessWord.API;
 using GuessWord.Dictionary.DBContext;
+using GuessWord.Dictionary.Infrastructure;
 using GuessWord.Dictionary.IntegrationEvents.EventHandlers;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -56,7 +57,13 @@ namespace GuessWord.Dictionary
                 });
             });
 
-            app.MigrateDbContext<DictionaryContext>((_, _) => { });
+            app.MigrateDbContext<DictionaryContext>((context, services) =>
+            {
+                var env = services.GetService<IWebHostEnvironment>();
+                var logger = services.GetService<ILogger<DictionaryContextSeed>>();
+
+                new DictionaryContextSeed().SeedAsync(context, env, logger).Wait();
+            });
 
             return app.RunAsync();
         }
