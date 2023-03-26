@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0.4-alpine3.17-amd64 AS base
 WORKDIR /app
 EXPOSE 80
 
@@ -11,7 +11,7 @@ RUN npm install
 COPY Web/WebSPA/Client .
 RUN npm run build
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0.202-alpine3.17-amd64 AS build
 WORKDIR /src
 
 COPY "GuessTheWord.sln" "GuessTheWord.sln"
